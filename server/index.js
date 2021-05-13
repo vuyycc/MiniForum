@@ -4,10 +4,12 @@ const PORT = 8797
 const cors = require('cors')
 const mongoose = require('mongoose');
 const dotenv = require('dotenv')
+const UserRouter = require('./controller/userController')
 dotenv.config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
+app.use('/user', UserRouter)
 
 var mongoDB = 'mongodb://localhost:27017/projectForum';
 mongoose.connect(mongoDB, function (err) {
