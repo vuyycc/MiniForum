@@ -9,6 +9,7 @@ dotenv.config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
+app.use(express.static('uploads'))
 
 const UserRouter = require('./controller/userController')
 const PostRouter = require('./controller/postController')
