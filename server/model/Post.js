@@ -4,8 +4,14 @@ var postSchema = mongoose.Schema({
     title: String,
     imgVideo: String,
     described: String,
-    like: Array,
-    comment: Array,
+    like: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    }],
+    comment: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Comment'
+    }],
     space: String,
     author: {
         type: mongoose.Schema.Types.ObjectId,
