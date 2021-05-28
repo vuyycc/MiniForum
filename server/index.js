@@ -13,7 +13,7 @@ app.use(express.static('uploads'))
 
 const UserRouter = require('./controller/userController')
 const PostRouter = require('./controller/postController')
-
+const CommentRounter = require('./controller/commentController')
 var mongoDB = 'mongodb://localhost:27017/projectForum';
 mongoose.connect(mongoDB, function (err) {
     if (err) throw err;
@@ -26,6 +26,7 @@ var db = mongoose.connection;
 
 app.use('/user', UserRouter)
 app.use('/post', PostRouter)
+app.use('/comment', CommentRounter)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.listen(PORT, () => { console.log("Server started on http://localhost:" + PORT) })
