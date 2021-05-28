@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../model/Post')
+//const Post = require('../model/Post')
 const Comment = require('../model/Comment')
 
 router.get('/get_comment/:id', async (req, res) => {
@@ -18,23 +18,37 @@ router.get('/get_comment/:id', async (req, res) => {
 
 })
 
-router.post('/', (req, res) => {
+
+
+/*router.post('/', (req, res) => {
     let comments = new Comment(req.body)
     comments.save((err) => {
         if (err) throw err;
         console.log('Comment save successfully')
     })
     res.json({ "data": comments })
-})
+})*/
 
 router.put('/set_comment/:id', async (req, res) => {
+    if (!req.params.id) {
+        res.status(400).send({messError: 'not found id'})
+    }
+    const id = {_id: req.params.id}
+    let update = req.body
+    Comment.findByIdAndUpdate(id,update,{new:true},(err, result)=>{
+        if(err) return res.send(err)
+        res.json(result)
+    })
+})
+
+/*router.put('/set_comment/:id', async (req, res) => {
     try {
         var post = await Post.findById({ _id: req.params.id }).exec();
         res.json(post)
     } catch (error) {
         res.status(500).send(error)
     }
-})
+})*/
 
 router.delete('/:id', (req, res) => {
     if (!req.params.id) {
