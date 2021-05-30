@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router();
-const multer = require('multer');
+//const multer = require('multer');
 const mongoose = require('mongoose')
 const User = require('../model/User')
 const bcrypt = require('bcrypt')
-
-const storage = multer.diskStorage({
+const constants = require('../constants')
+/*const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads')
     },
@@ -28,9 +28,9 @@ const upload = multer({
         fileSize: 10000000
     },
     fileFilter: fileFilter
-})
+})*/
 
-router.post('/', upload.single('avatar'), async (req,res)=>{
+router.post('/',constants.upload.single('avatar'), async (req,res)=>{
     const saltRound = 10
     let passwordHash = await bcrypt.hash(req.body.password, saltRound)
     req.body.password = passwordHash
@@ -57,7 +57,7 @@ router.get('/all',(req,res)=>{
     })
 })
 
-router.put('/update',upload.single('avatar') ,async (req,res)=>{
+router.put('/update',constants.upload.single('avatar') ,async (req,res)=>{
     const saltRound = 10
     let passwordHash = await bcrypt.hash(req.body.password, saltRound)
     req.body.password = passwordHash
