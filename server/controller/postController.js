@@ -70,7 +70,8 @@ router.get('/:id', async (req, res) => {
     if(!id){
         res.status(400).send({messErr:'not found id'})
     } else{
-    const post = await (await Post.findById(id).populate([{path: 'author', select:['name','avatar']},'comment',{path: 'like', select:['name','avatar']}]))
+        const post = await (await Post.findById(id).populate([{path: 'author', select:['name','avatar']},{path:'like',select:['name','avatar']},{path:'comment',populate:{path:'author',select:['name','avatar']}}]))
+    //const post = await (await Post.findById(id).populate([{path: 'author', select:['name','avatar']},'comment',{path: 'like', select:['name','avatar']}]))
     res.json({
         "message": "OK",
         "data": post
