@@ -41,7 +41,8 @@ router.post('/',constants.upload.single('avatar'), async (req,res)=>{
         password: req.body.password,
         address: req.body.address,
         age: req.body.age,
-        avatar: req.file.path
+        avatar: req.file.path,
+        role: req.body.role
     })
     user.save((err)=>{
         if(err) throw err;
