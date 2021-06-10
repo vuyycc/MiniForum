@@ -58,6 +58,18 @@ router.get('/all',(req,res)=>{
     })
 })
 
+router.get('/:id', (req, res) => {
+    const id = { _id: req.params.id }
+    if (!id) {
+        res.status(400).send({ messError: 'not found id' })
+    }
+
+    User.findById(id).exec((err, users) => {
+        if (err) throw err
+        res.json(users)
+    })
+})
+
 router.put('/update',constants.upload.single('avatar') ,async (req,res)=>{
     const saltRound = 10
     let passwordHash = await bcrypt.hash(req.body.password, saltRound)
