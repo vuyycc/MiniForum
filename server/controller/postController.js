@@ -78,6 +78,13 @@ router.get('/:id', async (req, res) => {
     })}
 })
 
+router.get('/', (req,res)=>{
+    return Post.find().populate([{path: 'author', select:['name','avatar']},{path:'like',select:['name','avatar']},{path:'comment',populate:{path:'author',select:['name','avatar']}}]).exec((err,posts)=>{
+        if(err) throw err
+        res.json(posts)
+    })
+})
+
 router.put('/:id',constants.upload.single('imgVideo') ,(req, res) => {
     if (!req.params.id) {
         res.status(400).send({ messError: 'not found id' })
