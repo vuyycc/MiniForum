@@ -65,6 +65,22 @@ router.post('/like/:id',async (req,res,)=>{
 
 })
 
+//unLike
+
+router.post('/unlike/:id',(req,res)=>{
+    Post.findByIdAndUpdate(req.params.id,{
+        $pull:{like:req.body._id}
+    },{
+        new:true
+    }).exec((err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }else{
+            res.json(result)
+        }
+    })
+})
+
 router.get('/:id', async (req, res) => {
     const id = { _id: req.params.id }
     if(!id){
