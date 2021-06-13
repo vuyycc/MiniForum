@@ -30,6 +30,8 @@ const upload = multer({
     fileFilter: fileFilter
 })*/
 
+
+//Create User
 router.post('/',constants.upload.single('avatar'), async (req,res)=>{
     const saltRound = 10
     let passwordHash = await bcrypt.hash(req.body.password, saltRound)
@@ -44,20 +46,26 @@ router.post('/',constants.upload.single('avatar'), async (req,res)=>{
         avatar: req.file.path,
         role: req.body.role
     })
+    const userExist = await User.findOne({
+        email: req.body.email
+    });
+    if (userExist) {
+        return res.status(400).send({ err: 'Email already exist' });
+    }
     user.save((err)=>{
         if(err) throw err;
         console.log("User save successfully");
     })
     res.json({"data": user})
 })
-
+//Get all User
 router.get('/all',(req,res)=>{
     return User.find().exec((err, users)=>{
         if(err) throw err
         res.json(users)
     })
 })
-
+//Get User by ID
 router.get('/:id', (req, res) => {
     const id = { _id: req.params.id }
     if (!id) {
@@ -69,7 +77,7 @@ router.get('/:id', (req, res) => {
         res.json(users)
     })
 })
-
+//Update User
 router.put('/update',constants.upload.single('avatar') ,async (req,res)=>{
     const saltRound = 10
     let passwordHash = await bcrypt.hash(req.body.password, saltRound)
@@ -93,7 +101,7 @@ router.put('/update',constants.upload.single('avatar') ,async (req,res)=>{
         res.json(result)
     })
 })
-
+//Delete User
 router.delete('/:id', (req, res) => {
     if (!req.params.id) {
         res.status(400).send({ messError: 'not found id' })

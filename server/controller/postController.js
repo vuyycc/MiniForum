@@ -4,7 +4,7 @@ const Post = require('../model/Post')
 const mongoose = require('mongoose')
 const Comment = require('../model/Comment')
 const constants = require('../constants')
-
+// New Post
 router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
     let post = new Post({
         
@@ -80,7 +80,7 @@ router.post('/unlike/:id',(req,res)=>{
         }
     })
 })
-
+// Get Post by Id
 router.get('/:id', async (req, res) => {
     const id = { _id: req.params.id }
     if(!id){
@@ -93,14 +93,14 @@ router.get('/:id', async (req, res) => {
         "data": post
     })}
 })
-
+//Get all Post
 router.get('/', (req,res)=>{
     return Post.find().populate([{path: 'author', select:['name','avatar']},{path:'like',select:['name','avatar']},{path:'comment',populate:{path:'author',select:['name','avatar']}}]).exec((err,posts)=>{
         if(err) throw err
         res.json(posts)
     })
 })
-
+//Update Post by Id
 router.put('/:id',constants.upload.single('imgVideo') ,(req, res) => {
     if (!req.params.id) {
         res.status(400).send({ messError: 'not found id' })
@@ -121,7 +121,7 @@ router.put('/:id',constants.upload.single('imgVideo') ,(req, res) => {
         res.json(result)
     })
 })
-
+//Delete Post
 router.delete('/:id', (req, res) => {
     if(!req.params.id) {
         res.status(400).send({messError: "not found id"})

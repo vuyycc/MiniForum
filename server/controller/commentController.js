@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 //const Post = require('../model/Post')
 const Comment = require('../model/Comment')
-
+//Get comment by Id
 router.get('/get_comment/:id', async (req, res) => {
     if (!req.params.id) {
         res.status(400).send({ messError: 'Not found id' })
@@ -28,7 +28,7 @@ router.get('/get_comment/:id', async (req, res) => {
     })
     res.json({ "data": comments })
 })*/
-
+// Uppdate Comment by Id
 router.put('/set_comment/:id', async (req, res) => {
     if (!req.params.id) {
         res.status(400).send({messError: 'not found id'})
@@ -49,7 +49,7 @@ router.put('/set_comment/:id', async (req, res) => {
         res.status(500).send(error)
     }
 })*/
-
+// Delete Comment
 router.delete('/:id', (req, res) => {
     if (!req.params.id) {
         res.status(400).send({messError: 'not found id'})
