@@ -5,24 +5,50 @@ const mongoose = require('mongoose')
 const Comment = require('../model/Comment')
 const constants = require('../constants')
 
-router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
-    let post = new Post({
-        
-        title: req.body.title,
-        imgVideo: req.file.path,
-        described: req.body.described,
-        like: req.body.like,
-        comment: req.body.comment,
-        space: req.body.space,
-        author:req.body.author
+router.get('/', async(req, res) => {
+    return Post.find().exec((err, posts) => {
+        if(err) throw err;
+        res.json(posts)
     })
-    post.save((err) => {
-        if (err) throw err;
-        console.log('Post save successfully')
-    })
-
-    res.json({"data": post} )
 })
+router.post('/add-post', (req, res) => {
+    // let post = new Post({
+
+    //     title: req.body.title,
+    //     imgVideo: 0,
+    //     described: req.body.described,
+    //     like: 0,
+    //     comment: 0,
+    //     space: req.body.space,
+    //     author: req.body.author
+    // })
+    // post.save((err) => {
+    //     if (err) throw err;
+    //     console.log('Post save successfully')
+    // })
+
+    // res.json({ "data": post })
+    console.log(req.body)
+})
+
+// router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
+//     let post = new Post({
+        
+//         title: req.body.title,
+//         imgVideo: req.file.path,
+//         described: req.body.described,
+//         like: req.body.like,
+//         comment: req.body.comment,
+//         space: req.body.space,
+//         author:req.body.author
+//     })
+//     post.save((err) => {
+//         if (err) throw err;
+//         console.log('Post save successfully')
+//     })
+
+//     res.json({"data": post} )
+// })
 
 //Add Comment
 

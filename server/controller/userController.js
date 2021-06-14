@@ -30,6 +30,8 @@ const upload = multer({
     fileFilter: fileFilter
 })*/
 
+
+
 router.post('/',constants.upload.single('avatar'), async (req,res)=>{
     const saltRound = 10
     let passwordHash = await bcrypt.hash(req.body.password, saltRound)
