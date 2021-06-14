@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken')
 const User = require('../model/User')
 const bcrypt = require('bcrypt')
 
+<<<<<<< HEAD
+=======
+// Login
+>>>>>>> f06b8575e825e2a47e1a33f66732fcf6973e1d8f
 router.post('/login', async (req,res)=>{
     const {email, password} = req.body;
     const user = await User.findOne({
@@ -14,7 +18,7 @@ router.post('/login', async (req,res)=>{
         checkPass = bcrypt.compareSync(password, user.password)
     }
     if(user, checkPass){
-        const accessToken = jwt.sign({email: user.email, _id: user._id}, process.env.SECRET_KEY);
+        const accessToken = jwt.sign({email: user.email, _id: user._id, role: user.role}, process.env.SECRET_KEY);
         return res.json({
             accessToken
         })
@@ -23,6 +27,7 @@ router.post('/login', async (req,res)=>{
     }
 })
 
+<<<<<<< HEAD
 router.post('/signup', async (req, res) => {
     let body = req.body
     const userExist = await User.findOne({
@@ -54,3 +59,6 @@ router.post('/signup', async (req, res) => {
 
 
 module.exports = router
+=======
+module.exports = router
+>>>>>>> f06b8575e825e2a47e1a33f66732fcf6973e1d8f

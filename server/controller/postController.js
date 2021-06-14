@@ -4,11 +4,29 @@ const Post = require('../model/Post')
 const mongoose = require('mongoose')
 const Comment = require('../model/Comment')
 const constants = require('../constants')
+<<<<<<< HEAD
 
 router.get('/', async(req, res) => {
     return Post.find().exec((err, posts) => {
         if(err) throw err;
         res.json(posts)
+=======
+// New Post
+router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
+    let post = new Post({
+        
+        title: req.body.title,
+        imgVideo: req.file.path,
+        described: req.body.described,
+        like: req.body.like,
+        comment: req.body.comment,
+        space: req.body.space,
+        author:req.body.author
+    })
+    post.save((err) => {
+        if (err) throw err;
+        console.log('Post save successfully')
+>>>>>>> f06b8575e825e2a47e1a33f66732fcf6973e1d8f
     })
 })
 router.post('/add-post', (req, res) => {
@@ -91,6 +109,22 @@ router.post('/like/:id',async (req,res,)=>{
 
 })
 
+//unLike
+
+router.post('/unlike/:id',(req,res)=>{
+    Post.findByIdAndUpdate(req.params.id,{
+        $pull:{like:req.body._id}
+    },{
+        new:true
+    }).exec((err,result)=>{
+        if(err){
+            return res.status(422).json({error:err})
+        }else{
+            res.json(result)
+        }
+    })
+})
+// Get Post by Id
 router.get('/:id', async (req, res) => {
     const id = { _id: req.params.id }
     if(!id){
@@ -103,7 +137,14 @@ router.get('/:id', async (req, res) => {
         "data": post
     })}
 })
-
+//Get all Post
+router.get('/', (req,res)=>{
+    return Post.find().populate([{path: 'author', select:['name','avatar']},{path:'like',select:['name','avatar']},{path:'comment',populate:{path:'author',select:['name','avatar']}}]).exec((err,posts)=>{
+        if(err) throw err
+        res.json(posts)
+    })
+})
+//Update Post by Id
 router.put('/:id',constants.upload.single('imgVideo') ,(req, res) => {
     if (!req.params.id) {
         res.status(400).send({ messError: 'not found id' })
@@ -124,7 +165,7 @@ router.put('/:id',constants.upload.single('imgVideo') ,(req, res) => {
         res.json(result)
     })
 })
-
+//Delete Post
 router.delete('/:id', (req, res) => {
     if(!req.params.id) {
         res.status(400).send({messError: "not found id"})
