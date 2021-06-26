@@ -131,12 +131,33 @@ router.get('/:id', async (req, res) => {
     }
 })
 //Get all Post
-router.get('/', (req, res) => {
-    return Post.find().populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }]).exec((err, posts) => {
-        if (err) throw err
-        res.json(posts)
-    })
+// router.get('/', (req, res) => {
+//     return Post.find().populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }]).exec((err, posts) => {
+//         if (err) throw err
+//         res.json(posts)
+//     })
+// })
+router.get('/', (req, res, next) => {
+    let perPage = 6;
+    let page = req.params.page || 1;
+    Post.find()
+        .sort({ created: -1 })
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
+        .populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }])
+        .exec((err, posts) => {
+            Post.countDocuments((err, count) => {
+                if (err) throw err;
+                res.json({
+                    "data": posts,
+                    "current": page,
+                    "pages": Math.ceil(count / perPage)
+                })
+            })
+        })
 })
+
+
 //Update Post by Id
 router.put('/:id', constants.upload.single('imgVideo'), (req, res) => {
     if (!req.params.id) {

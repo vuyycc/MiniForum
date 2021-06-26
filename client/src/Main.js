@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { Link, useLocation } from 'react-router-dom'
-import { deletePost, getAllPost, getSpace, newPOst, getPostBySpace } from './axios'
+import { deletePost, getAllPost, getSpace, newPOst, getPostBySpace, getPostByPage } from './axios'
 import io from 'socket.io-client'
 import Footer from './pages/footer'
 import './css/homscreen.css'
@@ -32,6 +32,10 @@ export default function Main() {
     const [newComment, setNewComment] = useState()
     const [delId, setDelId] = useState()
     const [searchValue, setSearchValue] = useState('')
+    const [pages, setPages] = useState('')
+    const [current, setCurrent] = useState('')
+    const [listPages, setListPages] = useState([])
+
     useEffect(() => {
         socket.on("getPost", data => {
             console.log(data);
@@ -77,11 +81,19 @@ export default function Main() {
     }, [])
     useEffect(() => {
         getAllPost().then(res => {
-            const newArray = [...res.data].reverse()
-            setPostData(newArray)
-            console.log(res.data);
+            setPostData(res.data.data)
+            setPages(res.data.pages)
+            setCurrent(res.data.current)
+            let arrPages = []
+            for(let i = 1; i <= 3 && i <= res.data.pages; i++){
+                console.log(i);
+                arrPages.push(i)
+            }
+            setListPages(arrPages)
+
         })
     }, [newPost, postDele, liked, unLiked, newComment, delId])
+
     const deletePostBtn = async (item, index) => {
         let id = item._id
         console.log(id);
@@ -205,6 +217,7 @@ export default function Main() {
         console.log(searchValue);
     }
 
+
     const renderPost = (item, index) => {
         return (
             <div class="subforum-row">
@@ -231,6 +244,31 @@ export default function Main() {
         )
     }
     //console.log(spaceId);
+    const toPages = (name) => {
+        getPostByPage(name).then(res => {
+            setPostData(res.data.data)
+            setPages(res.data.pages)
+            setCurrent(res.data.current)
+            let arrPages = []
+            for (let i = 1; i <= 3 && i <= res.data.pages; i++) {
+                console.log(i);
+                arrPages.push(i)
+            }
+            setListPages(arrPages)
+        })
+    }
+
+    const renderPage = (item, index) => {
+
+        return (
+            <div class={current == item ? "pagination:number isPages" : "pagination:number"} onClick={()=>{toPages(item)}}>
+                    {item}
+                </div>)
+
+
+    }
+
+
     return (
         <div class="container">
             <header>
@@ -327,6 +365,40 @@ export default function Main() {
                             {searchValue === 'titles' ? postData.filter(searchPostByTitle).map(renderPost) : postData.filter(searchPostByAuthor).map(renderPost)}
                             
                         </div>
+
+
+                    
+                        <div class={Number(pages) > 0 ? "pagination:container" : "disableOff"}>
+                            <div class={current != 1 && current > 3 ? "pagination:number arrow" : "pagination:number arrow disableOff"}>
+                                <svg width="18" height="18">
+                                    <use href="#left" />
+                                </svg>
+                                <Link to="main/pages/1"> <span class="arrow:text">First</span></Link>
+                               
+                            </div>
+                            <div class={current > 3 ? "pagination:number" : "pagination:number disableOff"}>
+                                ...
+                            </div>
+                           {listPages.map(renderPage)}
+                            <div class={current < pages - 3 ? "pagination:number" : "pagination:number disableOff"}>
+                                ...
+                            </div>
+                            <div class={current != pages && pages > 3 ? "pagination:number arrow" : "pagination:number arrow disableOff"} >
+                                    <Link to={"main/pages/"+ pages}> <span class="arrow:text">Last</span></Link>
+                                <svg width="18" height="18">
+                                    <use href="#right" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <svg class="hide">
+                            <symbol id="left" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></symbol>
+                            <symbol id="right" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></symbol>
+                        </svg>
+
+
+
+
                     </div>
                 </div>
             </main>

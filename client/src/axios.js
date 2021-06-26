@@ -42,6 +42,7 @@ export const getAllPost = () => {
 }
 
 
+
 export const deletePost = (id) => {
     return instantAxios.delete('/post/' + id)
 }
@@ -65,7 +66,7 @@ export const deleteUser = (id) => {
 
 
 export const getSpace = () => {
-    return instantAxios.get('/space')
+    return instantAxios.get('/main')
 }
 
 export const newPOst = (body) => {
@@ -90,4 +91,8 @@ export const deleteComment = (id, body) => {
 
 export const getPostBySpace = (id) => {
     return instantAxios.get('/main/' +id)
+}
+
+export const getPostByPage = (id) => {
+    return instantAxios.get('/main/pages/'+id)  
 }

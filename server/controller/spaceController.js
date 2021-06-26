@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Space = require('../model/Space');
+const Post = require('../model/Post')
 
 router.get('/:id', async (req, res) => {
     if (!req.params.id) {
@@ -25,6 +26,8 @@ router.get('/', (req, res) => {
     //}
 })
 
+
+
 router.post('/add', (req, res) => {
     let space = new Space({
         name: req.body.name,
@@ -37,5 +40,27 @@ router.post('/add', (req, res) => {
     })
     res.json(space)
 })
+
+router.get('/pages/:page',(req, res, next) => {
+    let perPage = 6;
+    let page = req.params.page || 1;
+    Post.find()
+    .sort({ created: -1 })
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
+        .populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }])
+        .exec((err, posts) => {
+            Post.countDocuments((err, count) => {
+                if (err) throw err;
+                res.json({
+                    "data": posts,
+                    "current": page,
+                    "pages": Math.ceil(count/perPage)
+                })
+            })
+        })
+})
+
+
 module.exports = router;
 

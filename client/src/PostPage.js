@@ -73,7 +73,7 @@ export default function PostPage() {
             content: comment,
             author: user._id
         }
-        addComment(param.id, body)
+        addComment(param.id, body).then(setComment(''))
         socket.emit('addComment', body)
     }
     const renderPost = (item) => {
@@ -126,6 +126,7 @@ export default function PostPage() {
     }
     return (
         <div>
+            <button >Dang xuat</button>
             <div>
                 <div id="user-pro">
                     <div>{post?.author?.name}</div>
@@ -148,7 +149,7 @@ export default function PostPage() {
                     <label>Comment</label>
                     <input value={comment} onChange={handleChangeComment} />
                 </div>
-                <button onClick={addCommentBtn} >Submit</button>
+                <button disabled={!comment} onClick={addCommentBtn} >Submit</button>
             </div>
         </div>
     )
