@@ -6,13 +6,16 @@ var postSchema = mongoose.Schema({
     described: String,
     like: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref: 'User'
     }],
     comment: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Comment'
+        ref: 'Comment'
     }],
-    space: String,
+    space: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Space'
+    }],
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -23,5 +26,5 @@ var postSchema = mongoose.Schema({
     }
 })
 
-var Post = mongoose.model('Post',postSchema)
+var Post = mongoose.model('Post', postSchema)
 module.exports = Post;

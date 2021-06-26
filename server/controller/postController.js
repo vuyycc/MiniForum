@@ -4,122 +4,115 @@ const Post = require('../model/Post')
 const mongoose = require('mongoose')
 const Comment = require('../model/Comment')
 const constants = require('../constants')
-<<<<<<< HEAD
-
-router.get('/', async(req, res) => {
-    return Post.find().exec((err, posts) => {
-        if(err) throw err;
-        res.json(posts)
-=======
+const Space = require('../model/Space');
+const User = require('../model/User');
 // New Post
-router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
+
+router.post('/add-post', constants.upload.single('imgVideo'), async (req, res) => {
+    const authId = req.authenticateUser._id
     let post = new Post({
-        
+        _id: new mongoose.Types.ObjectId,
         title: req.body.title,
-        imgVideo: req.file.path,
+        imgVideo: req.file?.path,
         described: req.body.described,
-        like: req.body.like,
-        comment: req.body.comment,
+        like: [],
+        comment: [],
         space: req.body.space,
-        author:req.body.author
+        author: req.body.author
     })
-    post.save((err) => {
-        if (err) throw err;
-        console.log('Post save successfully')
->>>>>>> f06b8575e825e2a47e1a33f66732fcf6973e1d8f
-    })
+    console.log(post._id);
+    if (authId) {
+        await post.save((err) => {
+            if (err) throw err;
+            console.log('Post save successfully')
+            Space.findByIdAndUpdate(post.space, {
+                $push: { list_posts: post._id }
+            }, { new: true }).exec((err, result) => {
+                if (err) {
+                    return res.status(422).json({ error: err })
+                }
+            })
+            User.findByIdAndUpdate(post.author, {
+                $push: { userPost: post._id }
+            }, { new: true }).exec((err) => {
+                if (err) {
+                    return res.status(422).json({ error: err })
+                }
+            })
+            //})} else {
+            // res.status(400).send({messError:'You must login '})
+            //}
+        }
+        )
+
+        res.json({ "data": post })
+    }
+    else {
+        res.status(400).send({ messError: 'You must login ' })
+    }
 })
-router.post('/add-post', (req, res) => {
-    // let post = new Post({
 
-    //     title: req.body.title,
-    //     imgVideo: 0,
-    //     described: req.body.described,
-    //     like: 0,
-    //     comment: 0,
-    //     space: req.body.space,
-    //     author: req.body.author
-    // })
-    // post.save((err) => {
-    //     if (err) throw err;
-    //     console.log('Post save successfully')
-    // })
-
-    // res.json({ "data": post })
-    console.log(req.body)
-})
-
-// router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
-//     let post = new Post({
-        
-//         title: req.body.title,
-//         imgVideo: req.file.path,
-//         described: req.body.described,
-//         like: req.body.like,
-//         comment: req.body.comment,
-//         space: req.body.space,
-//         author:req.body.author
-//     })
-//     post.save((err) => {
-//         if (err) throw err;
-//         console.log('Post save successfully')
-//     })
-
-//     res.json({"data": post} )
-// })
 
 //Add Comment
 
 router.post('/:id', async (req, res) => {
+    const authId = req.authenticateUser._id
     let comments = new Comment({
         _id: new mongoose.Types.ObjectId(),
         content: req.body.content,
-        author: req.body.author 
+        author: authId
     })
-    comments.save((err) => {
-        if (err) throw err;
-        console.log('Comment save successfully')
-    })
-    let idPost = { _id: req.params.id}
-    let nowPost = await Post.findById(idPost)
-    nowPost.comment = nowPost.comment||[]
-    const addUser = await nowPost.comment.push(comments._id)
-    Post.findByIdAndUpdate(idPost, nowPost, { new: true }, function (err, result) {
-        if (err) return res.send(err)
-    })
-    
-    res.json({ "data": nowPost })
+    const id = { _id: req.params.id }
+    if (authId) {
+        comments.save((err) => {
+            if (err) throw err;
+            console.log('Comment save successfully')
+        })
+        Post.findByIdAndUpdate(id, {
+            $push: { comment: comments._id }
+        }, { new: true }).exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            }
+        })
+    } else {
+        res.status(400).send({ messError: 'You must login ' })
+    }
 })
 
 //Like
 
-router.post('/like/:id',async (req,res,)=>{
-    let id = {_id: req.params.id}
-    const liked = {
-        _id: req.body._id
+router.post('/like/:id', async (req, res,) => {
+    let id = { _id: req.params.id }
+    const authId = req.authenticateUser._id
+    if (authId) {
+        let body = {
+            _id: req.body._id
+        }
+        Post.findByIdAndUpdate(id, {
+            $push: { like: body._id }
+        }, { new: true }).exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            } else {
+                res.json(result)
+            }
+        })
     }
-    var nowPost = await Post.findById(id)
-    nowPost.like = nowPost.like||[]
-    const addUser = await nowPost.like.push(liked)
-    Post.findByIdAndUpdate(id, nowPost, { new: true }, function (err, result) {
-        if (err) return res.send(err)
-    })
-    
-    res.json({ "data": nowPost })
-
 })
 
 //unLike
 
-router.post('/unlike/:id',(req,res)=>{
-    Post.findByIdAndUpdate(req.params.id,{
-        $pull:{like:req.body._id}
-    },{
-        new:true
-    }).exec((err,result)=>{
-        if(err){
-            return res.status(422).json({error:err})
-        }else{
+router.post('/unlike/:id', (req, res) => {
+    const authId = req.authenticateUser._id
+    Post.findByIdAndUpdate(req.params.id, {
+        $pull: { like: authId }
+    }, {
+        new: true
+    }).exec((err, result) => {
+        if (err) {
+            return res.status(422).json({ error: err })
+        } else {
             res.json(result)
         }
     })
@@ -127,57 +120,99 @@ router.post('/unlike/:id',(req,res)=>{
 // Get Post by Id
 router.get('/:id', async (req, res) => {
     const id = { _id: req.params.id }
-    if(!id){
-        res.status(400).send({messErr:'not found id'})
-    } else{
-        const post = await (await Post.findById(id).populate([{path: 'author', select:['name','avatar']},{path:'like',select:['name','avatar']},{path:'comment',populate:{path:'author',select:['name','avatar']}}]))
-    //const post = await (await Post.findById(id).populate([{path: 'author', select:['name','avatar']},'comment',{path: 'like', select:['name','avatar']}]))
-    res.json({
-        "message": "OK",
-        "data": post
-    })}
+    if (!id) {
+        res.status(400).send({ messErr: 'not found id' })
+    } else {
+        const post = await (Post.findById(id).populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }]))
+        res.json({
+            "message": "OK",
+            "data": post
+        })
+    }
 })
 //Get all Post
-router.get('/', (req,res)=>{
-    return Post.find().populate([{path: 'author', select:['name','avatar']},{path:'like',select:['name','avatar']},{path:'comment',populate:{path:'author',select:['name','avatar']}}]).exec((err,posts)=>{
-        if(err) throw err
+router.get('/', (req, res) => {
+    return Post.find().populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }]).exec((err, posts) => {
+        if (err) throw err
         res.json(posts)
     })
 })
 //Update Post by Id
-router.put('/:id',constants.upload.single('imgVideo') ,(req, res) => {
+router.put('/:id', constants.upload.single('imgVideo'), (req, res) => {
     if (!req.params.id) {
         res.status(400).send({ messError: 'not found id' })
     }
+    const authId = req.authenticateUser._id
     const id = { _id: req.params.id }
-    const update = {
+    if (authId) {
+        const update = {
             _id: id,
             title: req.body.title,
             imgVideo: req.file.path,
             described: req.body.described,
-            like: req.body.like,
-            comment: req.body.comment,
             space: req.body.space,
-            author:req.body.author
+        }
+        Post.findByIdAndUpdate(id, update, { new: true }, function (err, result) {
+            if (err) return res.send(err)
+            res.json(result)
+        })
+    } else {
+        res.status(400).send({ messError: 'You must login ' })
     }
-    Post.findByIdAndUpdate(id, update, { new: true }, function (err, result) {
-        if (err) return res.send(err)
-        res.json(result)
-    })
 })
 //Delete Post
-router.delete('/:id', (req, res) => {
-    if(!req.params.id) {
-        res.status(400).send({messError: "not found id"})
+router.delete('/:id', async (req, res) => {
+    if (!req.params.id) {
+        res.status(400).send({ messError: "not found id" })
     }
-
-    const id = {_id: req.params.id}
-    Post.findByIdAndDelete(id, function (err, result) {
-        if(err) return res.send(err)
-        res.json({
-            mess: "Sucessful delete id:" + req.params.id
+    const id = { _id: req.params.id }
+    const currentPost = await Post.findById(id)
+    let authId = req.authenticateUser._id
+    let role = req.authenticateUser.role
+    if (currentPost.author === authId || role === 'admin') {
+        User.findByIdAndUpdate(currentPost.author, {
+            $pull: { userPost: currentPost._id }
+        }, {
+            new: true
+        }).exec((err) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            }
         })
+        Space.findByIdAndUpdate(currentPost.space, {
+            $pull: { list_posts: currentPost._id }
+        }, {
+            new: true
+        }).exec((err) => {
+            if (err) {
+                return res.status(422).json({ error: err })
+            }
+        })
+        Post.findByIdAndDelete(id, function (err, result) {
+            if (err) return res.send(err)
+
+            res.json({
+                mess: "Sucessful delete id:" + req.params.id
+            })
+
+        })
+    }
+})
+
+router.post('/update/:id', (req, res) => {
+    let body = {
+        id: req.body._id
+    }
+    let id = { _id: req.params._id }
+    Post.findByIdAndUpdate(id, {
+        $pull: { comment: body._id }
+    }, { new: true }).exec((err) => {
+        if (err) {
+            return res.status(422).json({ error: err })
+        }
     })
 })
+
+
 
 module.exports = router

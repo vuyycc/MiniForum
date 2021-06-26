@@ -1,45 +1,58 @@
-import React,{useState, useEffect} from 'react'
-import {Link, useLocation} from 'react-router-dom'
-import {getListPost} from '../axios'
+<footer>
+                                <div class="main-content" id="section@" >
+                                    <div class="left box">
+                                        <h2>What is TIE?</h2>
+                                        <div class="content">
+                                            <p>TIE - Tech It Easy is forum which was created for technicians, tech-lovers and answers for every technical problems, questions in real life. </p>
+                                            <div class="social">
+                                                <a href=""><span class="fab fa-facebook-f" ></span></a>
+                                                <a href=""><span class="fab fa-twitter" ></span></a>
+                                                <a href=""><span class="fab fa-instagram" ></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="center box">
+                                        <h2>Address</h2>
+                                        <div class="content">
+                                            <div class="place">
+                                                <span class="fas fa-map-marker-alt"></span>
+                                                <span class="text">22 Thành Công, Hà Nội, Việt Nam</span>
+                                            </div>
+                                            <div class="phone">
+                                                <span class="fas fa-phone-alt"></span>
+                                                <span class="text">+84-918802002</span>
+                                            </div>
+                                            <div class="email">
+                                                <span class="fas fa-envelope"></span>
+                                                <span class="text">techiteasy.mindx@gmail.com</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="right box">
+                                        <h2>Feedback</h2>
+                                        <div class="content">
+                                            <form action="#">
+                                                <div class="email">
+                                                    <div class="text">Email *</div>
+                                                    <input type="email" required/>
+                            </div>
+                                                    <div class="msg">
+                                                        <div class="text">Message *</div>
+                                                        <textarea cols="25" rows="2.5" required></textarea>
+                                                    </div>
+                                                    <div class="btn">
+                                                        <button type="submit">Send</button>
+                                                    </div>
+                        </form>
+                    </div>
+                                        </div>
+                                    </div>
+                                    <div class="bottom">
+                                        <center>
+                                            <span class="credit">Created By <a href="../index.html">Tech It Easy</a> | </span>
+                                            <span class="far fa-copyright"></span><span> 2021 All rights reserved.</span>
+                                        </center>
+                                </div>
+        </footer>
 
-export default function Main() {
-    let location = useLocation()
-    const [listPost, setListPost] = useState([])
-    const [title, setTitle] = useState('')
-    const [described, setDescribed] = useState('')
-    const [space, setSpace] = useState('')
-    const [author, setAuthor] = useState('')
 
-    useEffect(() => {
-        getListPost().then(res => {
-            setListPost(res.data)
-        })
-    },[])
-
-    const renderItem = (item, index) => {
-        return (
-            <div className="boxPost" key={index}>
-                <div>{item.title}</div>
-                <div>{item.imgVideo}</div>
-                <div>{item.described}</div>
-                <div>{item.space}</div>
-            </div>
-        )
-    }
-    return (
-        <div>
-            <div id="my-body">
-                <div>
-                    <form action="/ post/add-post" method="POST" id="submit-post">
-                        <input value={title} placeholder='Title' onChange={(e)=>setTitle(e.target.value)}></input>
-                        <input value={described} placeholder='Described' onChange={(e)=>setDescribed(e.target.value)}></input>
-                        <input value={space} placeholder='Space' onChange={(e)=>setSpace(e.target.value)}></input>
-                        <input value={author} placeholder='Author' onChange={(e)=>setAuthor(e.target.value)}></input>
-                        <input type="submit" value="Submit"></input>
-                    </form>
-                </div>
-            {listPost.map(renderItem)}
-            </div>
-        </div>
-    )
-}

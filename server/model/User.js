@@ -22,6 +22,11 @@ var userSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    userPost: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+
+    }],
     avatar:{
         type: String,
         required: true
