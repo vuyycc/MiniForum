@@ -1,11 +1,14 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 
 export default function Header() {
+    let history = useHistory()
     const logoutBtn = () => {
         localStorage.clear();
         window.location.reload()
 
     }
+    
     return (
         <header>
             <a href="/main"><img src="/assets/images/Logo.png" class="logo" alt="Logo" /></a>
