@@ -118,15 +118,59 @@ router.post('/unlike/:id', (req, res) => {
     })
 })
 // Get Post by Id
-router.get('/:id', async (req, res) => {
-    const id = { _id: req.params.id }
+router.get('/:id', async (req, res, next) => {
+    let perPage = 10
+    let id = req.params.id
+    let page = req.params.page || 1
+    let i = (perPage * page) - perPage
+    let max = i + perPage;
     if (!id) {
         res.status(400).send({ messErr: 'not found id' })
     } else {
-        const post = await (Post.findById(id).populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }]))
-        res.json({
-            "message": "OK",
-            "data": post
+        await Post.findById(id).populate([{ path: 'author', select: ['name', 'avatar', 'userPost', 'role'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar', 'userPost', 'role'] } }, { path: 'space', select: 'name' }])
+            .exec((err, posts) => {
+                let arrPost = []
+                let lengthx = posts.comment.length;
+                let count = Math.ceil(lengthx / perPage)
+                for (i; i < max && i < lengthx; i++) {
+                    arrPost.push(posts.comment[i])
+                }
+                posts.comment = arrPost
+
+                res.json({
+                    "data": posts,
+                    "current": page,
+                    "pages": count
+                })
+            })
+    }
+})
+
+//get comment by page
+router.get('/:id/:page', async (req,res,next) => {
+    let perPage = 10
+    let id = req.params.id
+    let page = req.params.page || 1
+    let i = (perPage*page) - perPage
+    let max = i + perPage;
+    if(!id) {
+        res.status(400).send({messErr: 'not found id'})
+    }else {
+        await Post.findById(id).populate([{ path: 'author', select: ['name', 'avatar', 'userPost', 'role'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar', 'userPost', 'role'] } }, { path: 'space', select: 'name' }])
+        .exec((err, posts) => {
+            let arrPost = []
+            let lengthx = posts.comment.length;
+            let count = Math.ceil(lengthx / perPage)
+            for (i; i < max && i < lengthx; i++) {
+                arrPost.push(posts.comment[i])
+            }
+            posts.comment = arrPost
+            
+            res.json({
+                "data": posts,
+                "current": page,
+                "pages": count
+            })
         })
     }
 })
@@ -138,7 +182,7 @@ router.get('/:id', async (req, res) => {
 //     })
 // })
 router.get('/', (req, res, next) => {
-    let perPage = 6;
+    let perPage = 10;
     let page = req.params.page || 1;
     Post.find()
         .sort({ created: -1 })

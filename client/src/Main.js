@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { Link, useLocation } from 'react-router-dom'
-import { deletePost, getAllPost, getSpace, newPOst, getPostBySpace, getPostByPage } from './axios'
+import { deletePost, getAllPost, getSpace, newPOst, getPostBySpace, getPostByPage, searchByTitle, searchByAuthor, getPostTop } from './axios'
 import io from 'socket.io-client'
 import Footer from './pages/footer'
+import Header from './pages/header'
 import './css/homscreen.css'
 
 const socket = io('http://localhost:8797', { transport: ['websocket'] })
@@ -31,10 +32,11 @@ export default function Main() {
     const [unLiked, setUnliked] = useState()
     const [newComment, setNewComment] = useState()
     const [delId, setDelId] = useState()
-    const [searchValue, setSearchValue] = useState('')
+    const [searchValue, setSearchValue] = useState('everything')
     const [pages, setPages] = useState('')
     const [current, setCurrent] = useState('')
     const [listPages, setListPages] = useState([])
+    const [postTop, setPostTop] = useState({})
 
     useEffect(() => {
         socket.on("getPost", data => {
@@ -81,18 +83,31 @@ export default function Main() {
     }, [])
     useEffect(() => {
         getAllPost().then(res => {
+            console.log(res.data);
             setPostData(res.data.data)
             setPages(res.data.pages)
             setCurrent(res.data.current)
             let arrPages = []
-            for(let i = 1; i <= 3 && i <= res.data.pages; i++){
-                console.log(i);
+            for(let i = 1; i <= 3 && i <= res.data.pages;i++){
                 arrPages.push(i)
             }
             setListPages(arrPages)
 
         })
     }, [newPost, postDele, liked, unLiked, newComment, delId])
+    useEffect( async ()=> {
+        await getPostTop().then(res => {
+            console.log(res.data[0].comment.length);
+            let a = {}
+            a = res.data[0]
+            for(let i = 1; i < res.data.length; i++){
+                if(a.comment.length < res.data[i].comment.length){
+                    a = res.data[i]
+                }
+            }
+            setPostTop(a)
+        })
+    },[])
 
     const deletePostBtn = async (item, index) => {
         let id = item._id
@@ -105,11 +120,7 @@ export default function Main() {
         socket.emit('deletePost', id)
 
     }
-    const logoutBtn = () => {
-        localStorage.clear();
-        window.location.reload()
 
-    }
     //console.log(socket);
     const submitBtn = async () => {
         let data = new FormData()
@@ -149,28 +160,22 @@ export default function Main() {
     }
 
 
-    const searchPostByTitle = (item) => {
-        console.log(searchValue);
-        if (term == null) {
-            return item
-        } else if (item.title.toLowerCase().includes(term.toLowerCase()) ) {
-            return item
-        }
-    }
-
-    const searchPostByAuthor = (item) => {
-        if (term == null) {
-            return item
-        } else if (item.author?.name.toLowerCase().includes(term.toLowerCase())) {
-            return item
-        }
-    }
-
-    const toSpace = (name) => {
-        getPostBySpace(name).then(res => {
-            setPostData(res.data.list_posts)
+    const searchPostByTitle = () => {
+        searchByTitle(term).then(res => {
+            console.log(res.data);
+            setPostData(res.data.data)
+            setPages('')
         })
     }
+
+    const searchPostByAuthor = () => {
+        searchByAuthor(term).then(res => {
+            console.log(res.data);
+            setPostData(res.data.data)
+            setPages('')
+        })
+    }
+
 
     const handleChangeFile = (event) => {
 
@@ -185,27 +190,9 @@ export default function Main() {
 
     const renderSpace = (item, index) => {
         return (
-            <a onClick={()=>{toSpace(item._id)}}>
+            <a href={"/main/spaces/"+item._id}>
               {item.name}
             </a>
-        )
-    }
-    //console.log(postData)
-    const renderPost2 = (item, index) => {
-        return (
-            <p className="box-post" key={index}>
-                <Link to={'/post/' + item._id}>
-                    <img src={item.author ? item.author.avatar ? 'http://localhost:8797/' + item.author.avatar : null : null} height="30px" width="30px"></img>
-                    {item.author ? item.author.name : 'User đã bị xóa'}
-                    <div>{item.title}</div>
-                    <div>{item.like?.length} Like</div>
-                    <div>{item.comment?.length} Comment</div>
-
-                </Link>
-                {getUserReducer.User.role === 'admin' || getUserReducer.User._id == item.author?._id ?
-                    (<><button onClick={() => { deletePostBtn(item, index) }}>Delete Post</button></>) : null}
-
-            </p>
         )
     }
 
@@ -236,9 +223,16 @@ export default function Main() {
                 </div>
 
                 <div class="subforum-info subforum-column">
-                    <b><a href="">Last Post</a></b> by <a href="">{item.author.name}</a>
-                    <br />
-                    on <small>22 Dec 2021</small>
+                    <b><a href="">Last Post</a></b> by <a href="">{item.comment.length != 0 ? item.comment[0].author.name : item.author.name} </a>
+                  
+                    on
+                    <small >
+                        <p style={{ marginTop: "10px" }}>
+                            {item.comment.length != 0 ? new Date(item.comment[0].created).toDateString() : new Date(item.created).toDateString()}
+                        </p>
+                        {item.comment.length != 0 ? new Date(item.comment[0].created).toLocaleTimeString() : new Date(item.created).toLocaleTimeString()}
+                        <br />
+                    </small>
                 </div>
             </div>
         )
@@ -247,14 +241,34 @@ export default function Main() {
     const toPages = (name) => {
         getPostByPage(name).then(res => {
             setPostData(res.data.data)
-            setPages(res.data.pages)
             setCurrent(res.data.current)
-            let arrPages = []
-            for (let i = 1; i <= 3 && i <= res.data.pages; i++) {
-                console.log(i);
-                arrPages.push(i)
+            if(Number(name) == listPages[2] && Number(name) != res.data.pages){
+                let i = Number(name)
+                let max = i + 2
+                let arrPages = []
+                for (i; i <= max && i <= res.data.pages; i++) {
+                    arrPages.push(i)
+                }
+                setListPages(arrPages)
             }
-            setListPages(arrPages)
+           
+        })
+        console.log(listPages);
+    }
+
+    const toPagesF = (name) => {
+        getPostByPage(name).then(res => {
+            setPostData(res.data.data)
+            setCurrent(res.data.current)
+            if (Number(name) == listPages[0] || Number(name) < listPages[0]) {
+                let i = listPages[0] - 2
+                let max = listPages[0]
+                let arrPages = []
+                for (i; i <= max && i <= res.data.pages; i++) {
+                    arrPages.push(i)
+                }
+                setListPages(arrPages)
+            }
         })
     }
 
@@ -271,21 +285,7 @@ export default function Main() {
 
     return (
         <div class="container">
-            <header>
-                <a href="/main"><img src="/assets/images/Logo.png" class="logo" alt="Logo" /></a>
-                <div class="menu">
-                    <input type="checkbox" id="check" />
-                    <label for="check" class="check-btn">
-                        <i class="fa fa-bars"></i>
-                    </label>
-                    <ul>
-                        <li><a href="./index.html">Feed</a></li>
-                        <li><a href="/userprofile">Account</a></li>
-                        <li><a href="#section@">Feedback</a></li>
-                        <li><a onClick={logoutBtn}>Sign Out</a></li>
-                    </ul>
-                </div>
-            </header>
+           <Header />
 
             <div class="search-box">
                 <div>
@@ -294,8 +294,8 @@ export default function Main() {
                         <option value="titles" >Titles</option>
                         <option value="author" >Author</option>
                     </select>
-                    <input type="text" name="" id="" class={searchValue == ''?"offSearch":""} placeholder="Search ..." onChange={handleChangeTerm} />
-                    <button><i class="fa fa-search"></i></button>
+                    <input type="text" name="" id="" class={searchValue == 'everything'?"offSearch":""} placeholder="Search ..." onChange={handleChangeTerm} />
+                    <button onClick={searchValue == 'titles' ? searchPostByTitle : searchPostByAuthor}><i class="fa fa-search"></i></button>
                 </div>
             </div>
 
@@ -335,19 +335,26 @@ export default function Main() {
                                 </div>
 
                                 <div class="subforum-description subforum-column">
-                                    <h1><a href="#">Description Title</a></h1>
+                                    <h1><a href="#"><Link to={'/post/'+postTop._id}>{postTop.title}</Link></a></h1>
                                     <h2>Description content:</h2>
-                                    <p>Mot con vit xoe ra hai cai canh</p>
+                                    <p>{postTop.described}</p>
                                 </div>
 
                                 <div class="subforum-stats subforum-column center">
-                                    <span>2x posts | 1x Topics</span>
+                                    <span>{postTop.like?.length} Like | {postTop.comment?.length} Comment</span>
                                 </div>
 
                                 <div class="subforum-info subforum-column">
-                                    <b><a href="">Last Post</a></b> by <a href="">User X</a>
-                                    <br />
-                                    on <small>22 Dec 2021</small>
+                                    <b><a href="">Last Post</a></b> by <a href="">{postTop.comment ? postTop.comment[0]?.author.name : postTop.author?.name} </a>
+
+                                    on
+                                    <small >
+                                        <p style={{ marginTop: "10px" }}>
+                                            {postTop.comment? new Date(postTop.comment[0].created).toDateString() : new Date(postTop.created).toDateString()}
+                                        </p>
+                                        {postTop.comment ? new Date(postTop.comment[0].created).toLocaleTimeString() : new Date(postTop.created).toLocaleTimeString()}
+                                        <br />
+                                    </small>
                                 </div>
                             </div>
 
@@ -362,35 +369,36 @@ export default function Main() {
                             
                             
                             <hr class="subforum-devider" />
-                            {searchValue === 'titles' ? postData.filter(searchPostByTitle).map(renderPost) : postData.filter(searchPostByAuthor).map(renderPost)}
-                            
+                            {postData.map(renderPost)}
                         </div>
 
 
                     
-                        <div class={Number(pages) > 0 ? "pagination:container" : "disableOff"}>
-                            <div class={current != 1 && current > 3 ? "pagination:number arrow" : "pagination:number arrow disableOff"}>
-                                <svg width="18" height="18">
-                                    <use href="#left" />
-                                </svg>
-                                <Link to="main/pages/1"> <span class="arrow:text">First</span></Link>
-                               
-                            </div>
-                            <div class={current > 3 ? "pagination:number" : "pagination:number disableOff"}>
-                                ...
-                            </div>
-                           {listPages.map(renderPage)}
-                            <div class={current < pages - 3 ? "pagination:number" : "pagination:number disableOff"}>
-                                ...
-                            </div>
-                            <div class={current != pages && pages > 3 ? "pagination:number arrow" : "pagination:number arrow disableOff"} >
-                                    <Link to={"main/pages/"+ pages}> <span class="arrow:text">Last</span></Link>
-                                <svg width="18" height="18">
-                                    <use href="#right" />
-                                </svg>
-                            </div>
-                        </div>
+                            <div class={Number(pages) > 0 ? "pagination:container" : "disableOff"}>
+                            <div class={current != 1 && current > 2 ? "pagination:number arrow" : "pagination:number arrow disableOff"} onClick={() => { toPagesF(Number(current) - 1) }}>
+                                    <svg width="18" height="18">
+                                        <use href="#left" />
+                                    </svg>
+                                     <span class="arrow:text">First</span>
 
+                                </div>
+                                <div class={current > 2 ? "pagination:number" : "pagination:number disableOff"}>
+                                    ...
+                                </div>
+                                {listPages.map(renderPage)}
+                                <div class={current < pages - 2 ? "pagination:number" : "pagination:number disableOff"}>
+                                    ...
+                                </div>
+                            <div class={current != pages && pages > 3 ? "pagination:number arrow" : "pagination:number arrow disableOff"} onClick={() => { toPages(Number(current) + 1) }} >
+                                    <span class="arrow:text">Last</span>
+                                    <svg width="18" height="18">
+                                        <use href="#right" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                    
+                        
                         <svg class="hide">
                             <symbol id="left" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></symbol>
                             <symbol id="right" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></symbol>

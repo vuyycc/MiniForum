@@ -18,10 +18,12 @@ import { useDispatch } from 'react-redux';
 import { GET_USER } from './actions/types';
 
 const Main = lazy(() => import('./Main'))
+const Spaces = lazy(() => import('./site/Spaces'))
 const UserProfile = lazy(() => import('./site/UserProfile'))
 const EditUserProfile = lazy(() => import('./EditUserProfile'))
 //const Post = lazy(() => import('./Post'))
-const PostPage = lazy(() => import('./PostPage'))
+//const PostPage = lazy(() => import('./PostPage'))
+const PostPage = lazy(()=> import('./site/PostPage'))
 const AdminPage = lazy(() => import('./AdminPage'))
 const keyStorage = 'accessToken'
 
@@ -61,6 +63,8 @@ export default function Navigation() {
                             <Route exact path="/main/:id" component={Main} />
                             <Route exact path="/main/pages/:id" component={Main} />
                             <Suspense fallback={<div>Loading...</div>}>
+                            <Route exact path="/main/spaces/:id" component={Spaces} />
+                                <Route exact path="/main/spaces/:id/:page" component={Spaces} />
                                 <Route exact path="/userprofile" component={UserProfile} /></Suspense>
                         <Route exact path="/userprofile/:id" component={UserProfile} />
                         <Route exact path="/post/:id" component={PostPage} />

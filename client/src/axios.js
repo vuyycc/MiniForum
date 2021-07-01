@@ -96,3 +96,24 @@ export const getPostBySpace = (id) => {
 export const getPostByPage = (id) => {
     return instantAxios.get('/main/pages/'+id)  
 }
+
+export const getSpaceByPage = (id,page) => {
+    return instantAxios.get('/main/spaces/'+id+'/'+page)
+}
+
+export const getCommentByPage = (id,page) => {
+    return instantAxios.get('/post/'+id+'/'+page)
+}
+
+export const searchByTitle = (value) => {
+    return instantAxios.get('/main/search-title/'+value)
+}
+
+
+export const searchByAuthor = (value) => {
+    return instantAxios.get('/main/search-author/' + value)
+}
+
+export const getPostTop = () => {
+    return instantAxios.get('/main/post/top/1')
+}

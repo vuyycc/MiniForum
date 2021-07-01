@@ -249,6 +249,7 @@ header .logo:hover {
     margin-top: 10px;
   }
 }
+
 /* main */
 
 .main-container {
@@ -256,7 +257,6 @@ header .logo:hover {
   width: 100%;
   font-size: 15px;
   font-family: var(--ff-content);
-  display: flex;
   transition: all ease .5s;
   margin-bottom: 50px;
 }
@@ -284,256 +284,369 @@ header .logo:hover {
   color: var(--clr-red);
 }
 
+/* Thanh chỉ dẫn */
 
-/* List */
-.list-container {
-  width: 15%;
-  margin: 20px;
-  padding: 20px;
+.navigate {
+  margin: 0px 150px;
+  padding: 15px;
+  font-weight: lighter;
+  font-size: 25px;
+  transition: all ease .3s;
+  border: 2px solid var(--clr-dark-blue);
   border-radius: 10px;
-  background: #e2e2e2;
-  transition: all ease .5s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.list-title{
-  align-items: center;
-  margin: 10px;
-  padding: 10px;
-  background: #252525;
-  color: #ffffff;
-  border-radius: 5px;
+.navigate a:hover{
+  font-weight: bolder;
 }
-
-.list-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.list-content a{
-  margin: 20px;
-  padding: 5px;
-  font-size: 20px;
-  background: #252525;
-  color: #ffffff;
-  border-radius: 5px;
-  transition: all ease .5s;
-}
-
-.list-content a:hover{
-  box-shadow: -5px -5px var(--clr-blue), 5px 5px var(--clr-red);
-  color: #ffffff;
-}
-
 
 /* Posts */
-.post-container {
-  margin: 20px;
-  padding: 20px;
-  width: 80%;
-  border-radius: 10px;
-  margin-right: 10%;
-  transition: all ease .5s;
-  background: #e2e2e2;
+
+/* Post head */
+.post-table {
+  margin: 30px 150px;
 }
 
-.subforum{
-  margin-top: 20px;
+.table-head {
+  display: flex;
 }
 
-.subforum-title{ 
-  background-color: #252525;
-  color: #ffffff;
-  box-shadow: -5px -5px var(--clr-blue), 5px 5px var(--clr-red);
-  padding: 5px;
-  border-radius: 5px; 
-  margin: 10px;
-}
-
-.subforum-row {
-  display: grid;
-  grid-template-columns: 7% 60% 18% 15%;
-}
-
-.subforum-column {
+.table-head div {
   padding: 10px;
   margin: 4px;
-  border-radius: 5px;
-  background-color: #ffffff;
+  background-color: #252525;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 17px;
+  border-radius: 10px;
 }
 
-.subforum-row .center {
+.table-head .status {
+  flex: 7%;
+}
+
+.table-head .subjects {
+  flex: 68%;
+}
+
+.table-head .replies{
+  flex: 10%;
+}
+
+.table-head .last-reply {
+  flex: 15%;
+}
+
+
+/* Post content */
+
+.table-row {
   display: flex;
-  justify-content: center;
+}
+
+.table-row a{
+  font-size: 20px;
+  color: var(--clr-blue);
+  text-shadow: .8px .8px #ffffff;
+}
+
+.table-row .status, .table-row .subjects, .table-row .replies, .table-row .last-reply {
+  padding: 10px;
+  margin: 4px;
+  background-color: #e2e2e2;
+  font-size: 18px;
+  border-radius: 10px;
+  transition: all ease .3s;
+}
+
+.table-row .status {
+  flex: 7%;
+  font-size: 30px;
+  text-align: center; 
+}
+
+.table-row .subjects {
+  flex: 68%;
+}
+
+.table-row .replies{
+  flex: 10%;
+}
+
+.table-row .last-reply {
+  flex: 15%;
+}
+
+
+/* Danh so trang */
+
+.pagination {
+  padding: 20px;
+  font-size: 15px;
   align-items: center;
 }
 
-
-.subforum-icon i{
-  font-size: 45px;
+.pagination a{
+  color: var(--clr-blue);
+  margin-inline: 5px;
+  padding: 5px 10px;
+  border: solid 0.5px var(--clr-dark-blue);
+  transition: all ease .3s;
+  border-radius: 2px;
 }
 
-.subforum-description *{
-  margin-block: 0;
+.pagination a:hover {
+  background-color: var(--clr-red);
+  color:rgb(255, 255, 255)
 }
 
-.subforum-devider {
-  display: none ;
-}
-/* Responsive dien thoai */
 
-@media screen and (max-width: 600px) {
-  .post-container {
-    margin: 20px auto;
-    padding: 20px;
-    width: 90%;
-  }
-  .main-container {
-    display: flex;
-    flex-direction: column;
-  }
-  .main-container h1{
-    font-size: 18px;
-  }
-  .main-container h2{
-    font-size: 14px;
-  }
-  .subforum-row {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    grid-template-rows: 70% 30%;
-  }
-  .subforum-row p{
-    font-size: 12px;
-  }
-  .subforum-stats {
-    font-size: 10px;
-  }
-  .subforum-info {
-    font-size: 12px;
-  }
 
-  .subforum-devider {
-    display: block ;
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right,#eeeeee,#9b9b9b,#eeeeee);
-  }
-}
+/* Reponsive */
 
-/* Responsive tablette */
+@media (max-width: 1400px) {
 
-@media screen and (min-width: 460px) and (max-width: 1024px) {
-  .post-container {
-    margin: 20px auto;
-    padding: 20px;
-    width: 90%;
-  }
-  .subforum-row {
-    display: grid;
-    grid-template-columns: 10% 63% 10% 17%;
-  }
-  .subforum-icon i{
+  /* Thanh chỉ dẫn */
+
+  .navigate {
+    margin: 0px 150px;
+    padding: 15px;
     font-size: 25px;
   }
-  .main-container h1{
-    font-size: 30px;
+
+  /* Posts */
+
+  /* Post head */
+  .post-table {
+    margin: 30px 150px;
   }
-  .main-container h2{
+
+  .table-head div {
+    padding: 10px;
+    margin: 4px;
+    font-size: 15px;
+  }
+
+  /* Post content */
+
+  .table-row a{
+    font-size: 20px;
+    color: var(--clr-blue);
+    text-shadow: .8px .8px #ffffff;
+  }
+
+  .table-row .status, .table-row .subjects, .table-row .replies, .table-row .last-reply {
+    padding: 10px;
+    margin: 4px;
+    font-size: 15px;
+  }
+
+  .table-row .status {
+    flex: 7%;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  /* Danh so trang */
+
+  .pagination {
+    padding: 20px;
+    font-size: 15px;
+    align-items: center;
+  }
+
+  .pagination a{
+    margin-inline: 5px;
+    padding: 5px 10px;
+    border-radius: 2px;
+  }
+
+}
+
+@media (max-width: 1000px) {
+
+  /* Thanh chỉ dẫn */
+
+  .navigate {
+    margin: 0px 50px;
+    padding: 10px;
     font-size: 20px;
   }
 
-  .main-container {
-    display: flex;
-    flex-direction: column;
-  }
-}
+  /* Posts */
 
-/* Responsive list-container */
-
-@media screen and (max-width: 1024px) {
-  .list-container {
-    width: 90%;
-    margin: 20px auto;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .list-title{
-    align-items: center;
-    margin: 7px;
-    padding: 7px 50px;
-    border-radius: 5px;
-    transition: all ease .5s;
+  /* Post head */
+  .post-table {
+    margin: 30px 50px;
   }
 
-  .list-content {
-    display: flex;
-    flex-direction: row;
+  .table-head div {
+    padding: 10px;
+    margin: 3px;
+    font-size: 12px;
   }
-  
-  .list-content a{
-    margin: 10px;
-    padding: 5px;
+
+  /* Post content */
+
+  .table-row a{
     font-size: 15px;
-    border-radius: 5px;
-    transition: all ease .5s;
+    text-shadow: .8px .8px #ffffff;
+  }
+
+  .table-row .status, .table-row .subjects, .table-row .replies, .table-row .last-reply {
+    padding: 10px;
+    margin: 4px;
+    font-size: 12px;
+  }
+
+  .table-row .status {
+    flex: 7%;
+    font-size: 20px;
   }
 }
 
-@media screen and (max-width: 460px) {
+.last-reply p {
+  font-size: 1rem;
+}
+
+@media (max-width: 780px) {
+
+  /* Thanh chỉ dẫn */
+
+  .navigate {
+    margin: 0px 20px;
+    padding: 10px;
+    font-size: 17px;
+  }
+
+  /* Posts */
+
+  /* Post head */
+  .post-table {
+    margin: 20px 20px;
+  }
+
+  .table-head div {
+    padding: 8px;
+    margin: 3px;
+    font-size: 12px;
+  }
+
+  /* Post content */
+
+  .table-row a{
+    font-size: 15px;
+    text-shadow: .8px .8px #ffffff;
+  }
+
+  .table-row .status, .table-row .subjects, .table-row .replies, .table-row .last-reply {
+    padding: 10px;
+    margin: 4px;
+    font-size: 12px;
+  }
+
+  .table-row .status {
+    flex: 8%;
+    font-size: 20px;
+    text-align: center;
+  }
+  .table-row .subjects {
+    flex: 67%;
+  }
   
-  .list-title{
+  .table-row .replies{
+    flex: 10%;
+  }
+  
+  .table-row .last-reply {
+    flex: 15%;
+  }
+
+  /* Danh so trang */
+
+  .pagination {
+    padding: 15px;
+    font-size: 12px;
     align-items: center;
-    margin: 7px;
-    padding: 7px 50px;
-    border-radius: 5px;
-    transition: all ease .5s;
   }
 
-  .list-content {
-    display: flex;
-    flex-direction: row;
+  .pagination a{
+    margin-inline: 5px;
+    padding: 5px 10px;
+    border-radius: 2px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  /* Thanh chỉ dẫn */
+
+  .navigate {
+    margin: 0px 20px;
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  /* Posts */
+
+  /* Post head */
+  .post-table {
+    margin: 20px 20px;
+  }
+
+  .table-head div {
+    padding: 8px;
+    margin: 3px;
+    font-size: 12px;
+  }
+
+  /* Post content */
+
+  .table-row a{
+    font-size: 15px;
+    text-shadow: .8px .8px #ffffff;
+  }
+
+  .table-row .status, .table-row .subjects, .table-row .replies, .table-row .last-reply {
+    padding: 10px;
+    margin: 4px;
+    font-size: 12px;
+  }
+
+  .table-row .status {
+    flex: 8%;
+    font-size: 20px;
+    text-align: center;
+  }
+  .table-row .subjects {
+    flex: 67%;
   }
   
-  .list-content a{
-    margin: 7px;
-    padding: 3 px;
-    font-size: 13px;
-    border-radius: 5px;
-    transition: all ease .5s;
+  .table-row .replies{
+    flex: 10%;
+  }
+  
+  .table-row .last-reply {
+    flex: 15%;
+  }
+
+  /* Danh so trang */
+
+  .pagination {
+    padding: 15px;
+    font-size: 12px;
+    align-items: center;
+  }
+
+  .pagination a{
+    margin-inline: 5px;
+    padding: 5px 10px;
+    border-radius: 2px;
   }
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   @media screen and (max-width: 900px) {
     footer {
       position: relative;
@@ -545,7 +658,7 @@ header .logo:hover {
       flex-wrap: wrap;
       flex-direction: column;
     }
-    .main-content .box-home {
+    .main-content .box {
       margin: 5px 0;
     }
     .center .content .fas {
@@ -555,7 +668,7 @@ header .logo:hover {
       line-height: 30px;
       transition: 0.7s;
     }
-    .box-home h2 {
+    .box h2 {
       font-size: 1.3rem;
       font-weight: 600;
       text-transform: uppercase;
@@ -681,32 +794,26 @@ header .logo:hover {
 }
 
 
-@media (max-width: 800px) {
-  .logo{
-    width: 100px;
-  }
-  .logo:hover {
-    width: 105px;
-  }
+@media (max-width: 1200px) {
+    
+  
 }
 
-@media (max-width: 600px) {
-  .logo{
-    width: 80px;
-  }
-  .logo:hover {
-    width: 85px;
-  }
+@media (max-width: 900px) {
+    
+    
 }
 
-
-#add-post {
-  margin-left: 500px;
+@media (max-width: 900px) {
+    
+    
 }
 
-.offSearch {
-  display: none;
+@media (max-width: 640px) {
+    
+    
 }
+
 /* 
 Nagin */
 

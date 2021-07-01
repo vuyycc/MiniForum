@@ -81,7 +81,7 @@ app.use('/user',middleware.authenticateJWT ,UserRouter)
 app.use('/post',middleware.authenticateJWT , PostRouter)
 app.use('/comment', CommentRounter)
 //app.use('/space', SpaceRouter)
-app.use('/main',middleware.authenticateJWT, SpaceRouter )
+app.use('/main', SpaceRouter )
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 http.listen(PORT, () => { console.log("Server started on http://localhost:" + PORT) })

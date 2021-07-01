@@ -1,0 +1,186 @@
+/* footer */
+
+footer {
+    margin: 0;
+    padding: 0;
+    margin-top: 0vh;
+    color: #ffffff;
+    font-family: var(--ff-content);
+    box-sizing: border-box;
+    bottom: 0px;
+    width: 100%;
+    background: black;
+  }
+  
+  .main-content {
+    display: flex;
+  }
+  
+  .main-content .box-home {
+    flex-basis: 50%;
+    padding: 10px 20px;
+  }
+  
+  .box-home h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .box-home .content {
+    margin: 20px 0 0 0;
+    position: relative;
+  }
+  .box-home .content:before {
+    position: absolute;
+    content: '';
+    top: -10px;
+    height: 2px;
+    width: 100%;
+    background: var(--clr-red);
+  }
+  
+  .box-home .content:after{
+    position: absolute;
+    content: '';
+    height: 2px;
+    width: 15%;
+    background: var(--clr-red);
+    top: -10px;
+  }
+  
+  .left .content p {
+    text-align: justify;
+  }
+  
+  
+  .left .content .social {
+    margin: 20px 0 0 0;
+  }
+  
+  .left .content .social a {
+    padding: 0 2px;
+  }
+  .left .content .social a span {
+    text-decoration: none;
+    color: #ffffff;
+  }
+  
+  .left .content .social a span {
+    height: 60px;
+    width: 60px;
+    background: #01214b;
+    line-height: 60px;
+    text-align: center;
+    font-size: 30px;
+    border-radius: 30px;
+    transition: .7s;
+  }
+  
+  .left .content .social a span:hover {
+    background: var(--clr-red);
+    color: #ffffff;
+    transition: .7s;
+  }
+  
+  .center .content .fas {
+    font-size: 1.4375rem;
+    background: #01214b;
+    height: 45px;
+    width: 45px;
+    line-height: 45px;
+    text-align: center;
+    border-radius: 50%;
+    transition: 0.7s;
+    cursor: pointer;
+  }
+  
+  .center .content .fas:hover {
+    background: var(--clr-red);
+    transition: .7s;
+  }
+  
+  .center .content .text {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    padding-left: 10px;
+  }
+  
+  .center .content .phone {
+    margin: 10px 0;
+  }
+  .right h2{
+      color: var(--clr-red);
+      font-weight: 500;
+  }
+  .right form .text {
+    font-size: 1.0625rem;
+    margin-bottom: 2px;
+    color: #ffffff;
+  }
+  .right form .msg {
+    margin-top: 10px;
+  }
+  
+  .right form input, 
+  .right form textarea {
+    width: 100%;
+    font-size: 1rem;
+    background: #01214b;
+    padding-left: 10px;
+    border: 1px solid #0593d0;
+    color: #ffffff;
+    font-family: var(--ff-content);
+    transition: all ease .5s;
+  }
+  .right form input:hover, 
+  .right form textarea:hover {
+    outline-color: var(--clr-red);
+  }
+  
+  .right form input {
+    height: 35px;
+  }
+  
+  .right form .btn-home {
+    margin-top: 10px;
+  }
+  
+  .right form .btn-home button {
+    height: 40px;
+    align-items: center;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: #01214b;
+    font-size: 1.0625rem;
+    cursor: pointer;
+    color: var(--clr-white);
+    font-weight: 500;
+    transition: all ease .5s;
+  }
+  
+  .right form .btn-home button:hover{
+    background: var(--clr-red);
+  }
+  
+  .bottom center {
+    padding: 5px;
+    font-size: 0.9375rem;
+    background: var(--clr-dark-background);
+  }
+  
+  .bottom center span {
+    color: var(--clr-white);
+  }
+  
+  .bottom center a{
+    color: #ffffff;
+    text-shadow: -1px -1px var(--clr-red);
+    text-decoration: none;  
+  }
+  
+  .bottom center a:hover {
+    text-decoration: underline;
+  }
