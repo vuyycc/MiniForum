@@ -124,6 +124,11 @@ export default function PostPage() {
             </div>
         )
     }
+
+    const toPro = () => {
+        history.push('/userprofile')
+    }
+
     return (
         <div>
             <button >Dang xuat</button>

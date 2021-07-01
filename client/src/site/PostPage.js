@@ -267,7 +267,7 @@ export default function PostPage() {
                             <div class="authors">
                                 <div class="username"><a href="#">{post?.author?.name}</a></div>
                         
-                                <div>{post.author?.role == 'user' ? "Menber" : "Admin"}</div>
+                                <div>{post.author?.role == 'user' ? "Member" : "Admin"}</div>
                                 <img src={'http://localhost:8797/' + post?.author?.avatar} alt="user avatar" />
                                 <div>Posts: <u>{post?.author?.userPost.length}</u></div>
                                

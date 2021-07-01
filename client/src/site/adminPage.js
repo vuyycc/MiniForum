@@ -52,7 +52,7 @@ export default function AdminPage() {
             <div class="body">
                 <div class="authors">
                     <div class="username"><a href="#">{item.name}</a></div>
-                    <div>{item.role === 'admin'?"Admin":"Menber"}</div>
+                    <div>{item.role === 'admin'?"Admin":"Member"}</div>
                     <img src={'http://localhost:8797/' + item.avatar} height="100px" width="100px" />
                     <div>Posts: <u>{item.userPost.length}</u></div>
                     <br />

@@ -260,13 +260,7 @@ export default function Main() {
         })
         console.log(listPages);
     }
-    const searchPost = (item)=>{
-        if(term == null){
-            return item
-        } else if(item.title.toLowerCase().includes(term.toLowerCase())|| item.author?.name.toLowerCase().includes(term.toLowerCase())){
-            return item
-        }
-    }
+
     const toPagesF = (name) => {
         getPostByPage(name).then(res => {
             setPostData(res.data.data)
