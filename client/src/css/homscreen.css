@@ -760,3 +760,165 @@ Nagin */
 .isPages {
   background: #aca9a9;
 }
+
+/* post-area */
+
+/* post-button */
+
+.post-button {
+  width: max-content;
+  display: block;
+  margin: auto;
+}
+
+.post-button button {
+  padding: 15px 30px;
+  color: white;
+  background: black;
+  border-radius: 10px;
+  font-size: 30px;
+  font-family: var(--ff-content);
+  transition: all ease .3s;
+}
+
+.post-button button:hover {
+  color: black;
+  background: white;
+  border-radius: 10px;
+  border: 2px solid black;
+  box-shadow: -5px -5px var(--clr-blue), 5px 5px var(--clr-red);
+  cursor: pointer;
+}
+
+
+
+/* post-box */
+
+.post-area {
+  display: none;
+  transition: all ease .5s;
+}
+
+.post-wrapper {
+  width: 1000px;
+  display: flex;
+  box-shadow: 0 1px 20px 0 rgba(69,90,100,.3);
+  z-index: 100;
+  background: white;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  margin-top: 50px;
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.post-wrapper div {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.post-wrapper div h3{
+  font-size: 25px;
+  font-family: var(--ff-content);
+}
+
+.post-wrapper div input {
+  width: 100%;
+  margin-left: 10px;
+  font-family: var(--ff-content);
+  border: 2px solid var(--clr-dark-blue);
+  transition: all ease .5s;
+  font-size: 15px;
+}
+
+.post-wrapper div input:hover {
+  border: 2px solid var(--clr-red);
+  border-radius: 10px;
+}
+
+.post-wrapper div select {
+  margin-left: 10px;
+  font-family: var(--ff-content);
+  border: 2px solid var(--clr-dark-blue);
+  transition: all ease .5s;
+}
+
+.post-wrapper div select:hover {
+  border: 2px solid var(--clr-red);
+  border-radius: 10px;
+}
+
+.post-file button {
+  font-size: 20px;
+  padding : 5px 10px;
+  font-family: var(--ff-content);
+  background: var(--clr-blue);
+  outline: none;
+  color: white;
+  transition: all ease .5s;
+  cursor: pointer;
+}
+
+.post-file button:hover {
+  background: var(--clr-red);
+  border-radius: 10px;
+  outline: none;
+  color: white;
+}
+
+.post-submit {
+  margin: auto;
+  width: 100%;
+  align-items: center;
+
+}
+
+.post-wrapper .post-submit input {
+  width: 30%;
+  margin: 20px;
+  margin-left: 0px;
+  background: black;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+
+}
+
+.post-wrapper .post-submit input:hover {
+  border: none;
+  box-shadow: -5px -5px var(--clr-blue), 5px 5px var(--clr-red);
+}
+
+.post-submit button{
+  width: 30%;
+  margin: 20px;
+  margin-left: 0px;
+  background: black;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-family: var(--ff-content);
+  font-size: 15px;
+  transition: all ease .5s;
+}
+
+.post-submit button:hover{
+  border: none;
+  box-shadow: -5px -5px var(--clr-blue), 5px 5px var(--clr-red);
+  }
+
+  .b-none {
+    display: none;
+  }
+
+  .b-block {
+    display: block;
+  }

@@ -37,6 +37,7 @@ export default function Main() {
     const [current, setCurrent] = useState('')
     const [listPages, setListPages] = useState([])
     const [postTop, setPostTop] = useState({})
+    const [checkShow, setCheckShow] = useState(false)
     useEffect(() => {
         socket.on("getPost", data => {
             console.log(data);
@@ -134,6 +135,9 @@ export default function Main() {
         data.append('author', getUserReducer.User._id)
         await newPOst(data).then((res) => {
             console.log('hola');
+            setCheckShow(false)
+            setTitle('')
+            setDescribed('')
         })
         socket.emit('newPost', {
             data
@@ -294,6 +298,16 @@ export default function Main() {
         //}
     //},[term,postData])
 
+    const showPost = () => {
+        let a = checkShow ? false : true
+        console.log(a);
+        setCheckShow(a)
+    }
+
+    const dismissPost = () => {
+        setCheckShow(false)
+    }
+
     return (
         <div class="container">
            <Header />
@@ -310,7 +324,7 @@ export default function Main() {
                 </div>
             </div>
 
-            <div id="add-post">
+            {/* <div id="add-post">
                 <input placeholder="Title" onChange={handleChangeTitle} />
                 <input placeholder="Description" onChange={handleChangeDescribed} />
                 <select value={spaceId} onChange={handleChangeSpaceId} >
@@ -321,8 +335,45 @@ export default function Main() {
                 </select>
                 <input type='file' onChange={handleChangeFile} />
                 <button onClick={submitBtn}>Submit</button>
-            </div>
+            </div> */}
 
+            <div class="post-button">
+                <button onClick={showPost}>Post something</button>
+            </div>
+            
+            <div class={checkShow ? "post-area b-block": 'b-none'} id="post-area">
+                <div class="post-wrapper">
+                    <div class="post-title">
+                        <h3>Title:</h3>
+                        <input type="text" onChange={handleChangeTitle} placeholder="Title ..."/>
+                </div>
+
+                        <div class="post-description">
+                            <h3>Description:</h3>
+                        <input type="text" onChange={handleChangeDescribed} placeholder="Description ..."/>
+                </div>
+
+                            <div class="post-space">
+                                <h3>Space:</h3>
+                        <select value={spaceId} onChange={handleChangeSpaceId} id="">
+                                    <option value="everything">Everything</option>
+                            {space?.map((item, index) => {
+                                return <option key={index} value={item._id}>{item.name}</option>
+                            })}
+                                </select>
+                            </div>
+
+                            <div class="post-file">
+                        <input type='file' onChange={handleChangeFile} />
+                            </div>
+
+                            <div class="post-submit">
+                        <input type="button" name="" id="" value="submit" onClick={submitBtn}/>
+                                    <button class="post-dismiss" onclick={dismissPost}>Dismiss</button>
+                </div>
+
+                            </div>
+                        </div>
             <main>
                 <div class="main-container">
                     <div class="list-container">
