@@ -173,7 +173,6 @@ export default function PostPage() {
                     <div>{item.role == 'user' ? "Menber" : "Admin"}</div>
                     <img src={'http://localhost:8797/' + item.author?.avatar} alt="user avatar" />
                     <div>Posts: <u>{item.author?.userPost.length}</u></div>
-                    <div>Points: <u>1234</u></div>
                     <br />
                     <hr />
                     <br />
@@ -190,7 +189,7 @@ export default function PostPage() {
                     <div class="like" style={{ marginTop: "30px" }}>
                         {/* <div class="like-number"><i class="far fa-thumbs-up"></i> Likes: <u>100</u></div> */}
                         {getUserReducer.User._id == item.author?._id || getUserReducer.User.role === 'admin' ?
-                            (<><button onClick={() => { deleteCommentBtn(item) }}>Delete</button></>) : null}
+                            (<><button onClick={() => { deleteCommentBtn(item) }}><i class="far fa-trash-alt"></i> Delete</button></>) : null}
                         {/* <button><i class="far fa-thumbs-up"></i>  Like</button> */}
                     </div>
                 </div>
@@ -271,7 +270,7 @@ export default function PostPage() {
                                 <div>{post.author?.role == 'user' ? "Menber" : "Admin"}</div>
                                 <img src={'http://localhost:8797/' + post?.author?.avatar} alt="user avatar" />
                                 <div>Posts: <u>{post?.author?.userPost.length}</u></div>
-                                <div>Points: <u>1234</u></div>
+                               
                                 <br />
                                 <hr />
                                 <br />
@@ -289,11 +288,11 @@ export default function PostPage() {
                                 <div class="like" style={{marginTop: "10px"}}>
                                     <div class="like-number"><i class="far fa-thumbs-up"></i> Likes: <u>{post?.like?.length}</u></div>
                                     {getUserReducer.User._id == post.author?._id || getUserReducer.User.role === 'admin'?
-                                        (<><button onClick={deletePostBtn}>Delete</button></>) : null}
+                                        (<><button onClick={deletePostBtn}><i class="far fa-trash-alt"></i> Delete</button></>) : null}
                                     <button onClick={checkLike ? unlikeBtn : likeBtn} id={checkLike ? "cl-red" : ""}><i class={checkLike ? "far fa-thumbs-up cl-red" : "far fa-thumbs-up"}></i>  Like</button>
                                 </div>
                                 <div class="comment">
-                                    <button style={showCMT ? { color: "red" } : { color: "white" }} onClick={showComment}>Comment</button>
+                                    <button style={showCMT ? { color: "red" } : { color: "white" }} onClick={showComment}><i class="far fa-comment-alt"></i> Comment</button>
                                 </div>
                             </div>
                         </div>

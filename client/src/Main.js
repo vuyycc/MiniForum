@@ -96,10 +96,7 @@ export default function Main() {
     }, [newPost, postDele, liked, unLiked, newComment, delId])
     useEffect( async ()=> {
         await getPostTop().then(res => {
-<<<<<<< HEAD
-=======
             console.log(res.data[0]?.comment.length);
->>>>>>> 5e754a974d1647de108d6ce771b816e45927de80
             let a = {}
             a = res.data[0]
             for(let i = 1; i < res.data.length; i++){
@@ -231,11 +228,7 @@ export default function Main() {
                 </div>
 
                 <div class="subforum-info subforum-column">
-<<<<<<< HEAD
-                    <b><a href="">Last Post</a></b> by <a href="">{item.comment?.length != 0 ? item.comment[0].author?.name : item.author?.name} </a>
-=======
                     <b><a href="">Last Post</a></b> by <a href="">{item.comment?.length != 0 ? item.comment[0]?.author?.name : item.author?.name} </a>
->>>>>>> 5e754a974d1647de108d6ce771b816e45927de80
                   
                     on
                     <small >
@@ -374,9 +367,9 @@ export default function Main() {
                                     on
                                     <small >
                                         <p style={{ marginTop: "10px" }}>
-                                            {postTop?.comment? new Date(postTop?.comment[0].created).toDateString() : new Date(postTop?.created).toDateString()}
+                                            {postTop?.comment? new Date(postTop?.comment[0]?.created).toDateString() : new Date(postTop?.created).toDateString()}
                                         </p>
-                                        {postTop?.comment ? new Date(postTop?.comment[0].created).toLocaleTimeString() : new Date(postTop?.created).toLocaleTimeString()}
+                                        {postTop?.comment ? new Date(postTop?.comment[0]?.created).toLocaleTimeString() : new Date(postTop?.created).toLocaleTimeString()}
                                         <br />
                                     </small>
                                 </div>
