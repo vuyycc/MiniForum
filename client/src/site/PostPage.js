@@ -187,7 +187,7 @@ export default function PostPage() {
                         {/* <div class="like-number"><i class="far fa-thumbs-up"></i> Likes: <u>100</u></div> */}
                         {getUserReducer.User._id == item.author?._id || getUserReducer.User.role === 'admin' ?
                             (<><button onClick={() => { deleteCommentBtn(item) }}>Delete</button></>) : null}
-                        <button><i class="far fa-thumbs-up"></i>  Like</button>
+                        {/* <button><i class="far fa-thumbs-up"></i>  Like</button> */}
                     </div>
                 </div>
             </div>

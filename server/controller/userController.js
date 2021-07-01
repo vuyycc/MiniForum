@@ -11,7 +11,7 @@ router.get('/all', (req, res) => {
     let role = req.authenticateUser.role
     console.log(role);
     if (role === "admin") {
-        return User.find().exec((err, users) => {
+        return User.find().populate({path:'userPost', select: ['like','comment'] }).exec((err, users) => {
             if (err) throw err
             res.json(users)
         })

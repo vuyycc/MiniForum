@@ -24,7 +24,8 @@ const EditUserProfile = lazy(() => import('./EditUserProfile'))
 //const Post = lazy(() => import('./Post'))
 //const PostPage = lazy(() => import('./PostPage'))
 const PostPage = lazy(()=> import('./site/PostPage'))
-const AdminPage = lazy(() => import('./AdminPage'))
+//const AdminPage = lazy(() => import('./AdminPage'))
+const AdminPage = lazy(()=> import('./site/adminPage'))
 const keyStorage = 'accessToken'
 
 export default function Navigation() {

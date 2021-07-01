@@ -74,7 +74,7 @@ export default function Signup() {
                         <div  id="myForm">
                             <div>
                                 <input class="input-username" type="email" name="a" value={email} onChange={handleChangeEmail} required/>
-                                    <label>User Name</label>
+                                    <label>Email</label>
                 </div>
                                 <div>
                                     <input class="input-password" type="password" name="b" value={password} onChange={handleChangePass} required/>

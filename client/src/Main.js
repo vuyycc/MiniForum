@@ -97,7 +97,6 @@ export default function Main() {
     }, [newPost, postDele, liked, unLiked, newComment, delId])
     useEffect( async ()=> {
         await getPostTop().then(res => {
-            console.log(res.data[0].comment.length);
             let a = {}
             a = res.data[0]
             for(let i = 1; i < res.data.length; i++){
@@ -223,7 +222,7 @@ export default function Main() {
                 </div>
 
                 <div class="subforum-info subforum-column">
-                    <b><a href="">Last Post</a></b> by <a href="">{item.comment.length != 0 ? item.comment[0].author.name : item.author.name} </a>
+                    <b><a href="">Last Post</a></b> by <a href="">{item.comment?.length != 0 ? item.comment[0].author?.name : item.author?.name} </a>
                   
                     on
                     <small >
@@ -335,9 +334,9 @@ export default function Main() {
                                 </div>
 
                                 <div class="subforum-description subforum-column">
-                                    <h1><a href="#"><Link to={'/post/'+postTop._id}>{postTop.title}</Link></a></h1>
+                                    <h1><a href="#"><Link to={'/post/'+postTop?._id}>{postTop?.title}</Link></a></h1>
                                     <h2>Description content:</h2>
-                                    <p>{postTop.described}</p>
+                                    <p>{postTop?.described}</p>
                                 </div>
 
                                 <div class="subforum-stats subforum-column center">
