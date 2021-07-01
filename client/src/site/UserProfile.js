@@ -127,8 +127,8 @@ export default function UserProfile() {
             //avatar
         }
         updateUser(body).then(res => {
-            setCheckEdit(false)
             history.push('/userprofile')
+            window.location.reload()
         })
     }
 

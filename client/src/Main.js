@@ -135,9 +135,9 @@ export default function Main() {
         data.append('author', getUserReducer.User._id)
         await newPOst(data).then((res) => {
             console.log('hola');
-            setCheckShow(false)
             setTitle('')
             setDescribed('')
+            setCheckShow(false)
         })
         socket.emit('newPost', {
             data
@@ -324,18 +324,6 @@ export default function Main() {
                 </div>
             </div>
 
-            {/* <div id="add-post">
-                <input placeholder="Title" onChange={handleChangeTitle} />
-                <input placeholder="Description" onChange={handleChangeDescribed} />
-                <select value={spaceId} onChange={handleChangeSpaceId} >
-                    <option disabled selected  >Select space</option>
-                    {space?.map((item, index) => {
-                        return <option key={index} value={item._id}>{item.name}</option>
-                    })}
-                </select>
-                <input type='file' onChange={handleChangeFile} />
-                <button onClick={submitBtn}>Submit</button>
-            </div> */}
 
             <div class="post-button">
                 <button onClick={showPost}>Post something</button>

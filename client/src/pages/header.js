@@ -18,7 +18,7 @@ export default function Header() {
                     <i class="fa fa-bars"></i>
                 </label>
                 <ul>
-                    <li><a href="./index.html">Feed</a></li>
+                    <li><a href="./admin">Admin</a></li>
                     <li><a href="/userprofile">Account</a></li>
                     <li><a href="#section@">Feedback</a></li>
                     <li><a onClick={logoutBtn}>Sign Out</a></li>
