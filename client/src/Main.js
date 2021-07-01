@@ -22,7 +22,7 @@ export default function Main() {
     const [newPost, setNewPost] = useState()
     const [title, setTitle] = useState()
     const [described, setDescribed] = useState()
-    const [author, setAuthor] = useState()
+    //const [author, setAuthor] = useState()
     const [space, setSpace] = useState([])
     const [spaceId, setSpaceId] = useState()
     const [file, setFile] = useState()
@@ -37,7 +37,6 @@ export default function Main() {
     const [current, setCurrent] = useState('')
     const [listPages, setListPages] = useState([])
     const [postTop, setPostTop] = useState({})
-
     useEffect(() => {
         socket.on("getPost", data => {
             console.log(data);
@@ -97,7 +96,7 @@ export default function Main() {
     }, [newPost, postDele, liked, unLiked, newComment, delId])
     useEffect( async ()=> {
         await getPostTop().then(res => {
-            console.log(res.data[0].comment.length);
+            console.log(res.data[0]?.comment.length);
             let a = {}
             a = res.data[0]
             for(let i = 1; i < res.data.length; i++){
@@ -161,19 +160,25 @@ export default function Main() {
 
 
     const searchPostByTitle = () => {
+        if(term){
         searchByTitle(term).then(res => {
             console.log(res.data);
             setPostData(res.data.data)
             setPages('')
-        })
+        })} else {
+            window.location.reload()
+        }
     }
 
     const searchPostByAuthor = () => {
+        if(term){
         searchByAuthor(term).then(res => {
             console.log(res.data);
             setPostData(res.data.data)
             setPages('')
-        })
+        })} else {
+            window.location.reload()
+        }
     }
 
 
@@ -223,7 +228,7 @@ export default function Main() {
                 </div>
 
                 <div class="subforum-info subforum-column">
-                    <b><a href="">Last Post</a></b> by <a href="">{item.comment.length != 0 ? item.comment[0].author.name : item.author.name} </a>
+                    <b><a href="">Last Post</a></b> by <a href="">{item.comment?.length != 0 ? item.comment[0]?.author?.name : item.author?.name} </a>
                   
                     on
                     <small >
@@ -255,7 +260,13 @@ export default function Main() {
         })
         console.log(listPages);
     }
-
+    const searchPost = (item)=>{
+        if(term == null){
+            return item
+        } else if(item.title.toLowerCase().includes(term.toLowerCase())|| item.author?.name.toLowerCase().includes(term.toLowerCase())){
+            return item
+        }
+    }
     const toPagesF = (name) => {
         getPostByPage(name).then(res => {
             setPostData(res.data.data)
@@ -281,7 +292,13 @@ export default function Main() {
 
 
     }
-
+    //useEffect(()=>{
+      //  if(!term){
+        //    setResult(postData)
+        //}else{
+          //  setResult(postData.filter(searchPost))
+        //}
+    //},[term,postData])
 
     return (
         <div class="container">
@@ -335,24 +352,24 @@ export default function Main() {
                                 </div>
 
                                 <div class="subforum-description subforum-column">
-                                    <h1><a href="#"><Link to={'/post/'+postTop._id}>{postTop.title}</Link></a></h1>
+                                    <h1><a href="#"><Link to={'/post/'+postTop?._id}>{postTop?.title}</Link></a></h1>
                                     <h2>Description content:</h2>
-                                    <p>{postTop.described}</p>
+                                    <p>{postTop?.described}</p>
                                 </div>
 
                                 <div class="subforum-stats subforum-column center">
-                                    <span>{postTop.like?.length} Like | {postTop.comment?.length} Comment</span>
+                                    <span>{postTop?.like?.length} Like | {postTop?.comment?.length} Comment</span>
                                 </div>
 
                                 <div class="subforum-info subforum-column">
-                                    <b><a href="">Last Post</a></b> by <a href="">{postTop.comment ? postTop.comment[0]?.author.name : postTop.author?.name} </a>
+                                    <b><a href="">Last Post</a></b> by <a href="">{postTop?.comment ? postTop?.comment[0]?.author?.name : postTop?.author?.name} </a>
 
                                     on
                                     <small >
                                         <p style={{ marginTop: "10px" }}>
-                                            {postTop.comment? new Date(postTop.comment[0].created).toDateString() : new Date(postTop.created).toDateString()}
+                                            {postTop?.comment? new Date(postTop?.comment[0].created).toDateString() : new Date(postTop?.created).toDateString()}
                                         </p>
-                                        {postTop.comment ? new Date(postTop.comment[0].created).toLocaleTimeString() : new Date(postTop.created).toLocaleTimeString()}
+                                        {postTop?.comment ? new Date(postTop?.comment[0].created).toLocaleTimeString() : new Date(postTop?.created).toLocaleTimeString()}
                                         <br />
                                     </small>
                                 </div>
@@ -369,7 +386,7 @@ export default function Main() {
                             
                             
                             <hr class="subforum-devider" />
-                            {postData.map(renderPost)}
+                            {postData?.map(renderPost)}
                         </div>
 
 

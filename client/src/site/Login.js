@@ -73,12 +73,14 @@ export default function Login({ setToken }  ) {
                         <h2>Sign in</h2>
                         <div  id="myForm">
                             <div>
+                            <label>Email</label>
                                 <input class="input-username" type="email" name="a" value={email} onChange={handleChangeEmail} required/>
-                                    <label>User Name</label>
+                                    
                 </div>
                                 <div>
+                                <label>Password</label>
                                     <input class="input-password" type="password" name="b" value={password} onChange={handleChangePass} required/>
-                                        <label>Password</label>
+                                        
                 </div>
                                     <button id="submit" onClick={loginBtn}>Log in</button>
                                     <div class="register">

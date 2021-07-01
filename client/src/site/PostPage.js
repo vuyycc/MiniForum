@@ -68,7 +68,7 @@ export default function PostPage() {
 
     useEffect(() => {
         if (postDele == params.id) {
-            history.push('/')
+            history.push('/main')
             alert('Bai viet da bi xoa')
         }
     }, [postDele])
@@ -95,12 +95,16 @@ export default function PostPage() {
         setComment(event.target.value)
     }
 
-    const deletePostBtn = (item) => {
-        let id = item._id
-        deletePost(item._id).then(res => {
-            alert('Xóa bài viết thành công')
+    const deletePostBtn = () => {
+        let id = params.id
+        console.log(id);
+        socket.emit('deletePost', id)
+        deletePost(id).then(res => {
+            //alert('Xóa bài viết thành công')
+            history.push('/main')
         })
-        history.push('/main')
+        
+        //history.push('/main')
     }
 
     const addCommentBtn = () => {
@@ -285,7 +289,7 @@ export default function PostPage() {
                                 <div class="like" style={{marginTop: "10px"}}>
                                     <div class="like-number"><i class="far fa-thumbs-up"></i> Likes: <u>{post?.like?.length}</u></div>
                                     {getUserReducer.User._id == post.author?._id || getUserReducer.User.role === 'admin'?
-                                        (<><button onClick={() => { deletePostBtn(post) }}>Delete</button></>) : null}
+                                        (<><button onClick={deletePostBtn}>Delete</button></>) : null}
                                     <button onClick={checkLike ? unlikeBtn : likeBtn} id={checkLike ? "cl-red" : ""}><i class={checkLike ? "far fa-thumbs-up cl-red" : "far fa-thumbs-up"}></i>  Like</button>
                                 </div>
                                 <div class="comment">
