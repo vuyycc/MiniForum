@@ -234,7 +234,7 @@ router.delete('/:id', async (req, res) => {
     const currentPost = await Post.findById(id)
     let authId = req.authenticateUser._id
     let role = req.authenticateUser.role
-    if (currentPost.author === authId || role === 'admin') {
+    //if (currentPost.author === authId || role === 'admin') {
         User.findByIdAndUpdate(currentPost.author, {
             $pull: { userPost: currentPost._id }
         }, {
@@ -261,7 +261,7 @@ router.delete('/:id', async (req, res) => {
             })
 
         })
-    }
+    //}
 })
 
 router.post('/update/:id', (req, res) => {

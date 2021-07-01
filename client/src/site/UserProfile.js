@@ -24,7 +24,7 @@ export default function UserProfile() {
             setCurrentUser(res.data)
         })
     }, [])
-    console.log(currentUser.userPost);
+    console.log(currentUser?.userPost);
     const editBtn = () => {
         history.push('/editUser')
     }
@@ -57,7 +57,7 @@ export default function UserProfile() {
     }
     const editPassword = () => {
 
-        if (newPassword === reNewPassword && newPassword !== '') {
+        if (newPassword === reNewPassword && newPassword !== ''&& newPassword.length > 5 && newPassword.length < 10) {
             let body = {
                 currentPassword,
                 newPassword
@@ -103,10 +103,10 @@ export default function UserProfile() {
         <div>
             <div><button onClick={logoutBtn}>Dang xuat</button></div>
             <div id="userProfile">
-                <div>Name: {currentUser.name}</div>
-                <div>Email: {currentUser.email}</div>
-                <div>Address: {currentUser.address}</div>
-                <div>Age: {currentUser.age}</div>
+                <div>Name: {currentUser?.name}</div>
+                <div>Email: {currentUser?.email}</div>
+                <div>Address: {currentUser?.address}</div>
+                <div>Age: {currentUser?.age}</div>
                 <div id="password">
                     <div>Password:*******</div>
                     {param.id ? null : (<button onClick={showEditPassword}>Change Password</button>)}
@@ -119,14 +119,14 @@ export default function UserProfile() {
                 </div>
                 <div>
                     <li>Avatar</li>
-                    <img src={'http://localhost:8797/' + currentUser.avatar} height="300px" width="300px"></img>
+                    <img src={'http://localhost:8797/' + currentUser?.avatar} height="300px" width="300px"></img>
                     <div>
                         {param.id ? null :
                             (<>
                                 {/* <label for='file-upload'>
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuZK3D1EibbMjkeDUE2lJ4WTc_2eNrW25B4g&usqp=CAU" height='30px' width='30px' />
                         </label> */}
-                                <input id="file-upload" onChange={handleChangeImg} type='file'></input></>)}
+                                <input id="file-upload" onChange={handleChangeImg} type='file' accept="image/png, image/gif, image/jpeg"></input></>)}
                         {param.id ? null : (<button onClick={editImgBtn}>Edit Img</button>)}
                     </div>
                 </div>
@@ -134,7 +134,7 @@ export default function UserProfile() {
             </div>
             
             <div>
-                {currentUser.userPost ? currentUser.userPost.map(renderPost) : null}
+                {currentUser?.userPost ? currentUser?.userPost?.map(renderPost) : null}
             </div>
         </div>
     )

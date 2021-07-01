@@ -73,16 +73,23 @@ export default function Signup() {
                         <h2>Sign in</h2>
                         <div  id="myForm">
                             <div>
+                            <label>Email</label>
                                 <input class="input-username" type="email" name="a" value={email} onChange={handleChangeEmail} required/>
+<<<<<<< HEAD
                                     <label>Email</label>
+=======
+                                    
+>>>>>>> 5e754a974d1647de108d6ce771b816e45927de80
                 </div>
                                 <div>
+                                <label>Password</label>
                                     <input class="input-password" type="password" name="b" value={password} onChange={handleChangePass} required/>
-                                        <label>Password</label>
+                                        
                 </div>
                                     <div>
+                                    <label>Confirm Password</label>
                                         <input class="input-password" type="password" name="b" value={rePassword} onChange={handleChangeRePass} required/>
-                                            <label>Confirm Password</label>
+                                            
                 </div>
                                         <button id="submit" onClick={signupBtn}>Sign Up</button>
                                         <div class="register">

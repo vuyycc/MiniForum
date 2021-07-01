@@ -95,7 +95,7 @@ export default function Spaces() {
                     </p>
                     {item.comment.length != 0 ? new Date(item.comment[0].created).toLocaleTimeString() : new Date(item.created).toLocaleTimeString() }
                     <br />
-                    By <b><a href="#">{item.comment.length != 0 ? item.comment[0].author.name: item.author.name}</a></b>
+                    By <b><a href="#">{item.comment.length != 0 ? item.comment[0]?.author?.name: item.author?.name}</a></b>
                 </div>
             </div>
         )
@@ -147,7 +147,7 @@ export default function Spaces() {
                             <div class="last-reply">Last Reply</div>
                         </div>
 
-                    {dataPosts.length != 0 ? dataPosts.map(renderPost) : renderNull()}
+                    {dataPosts.length != 0 ? dataPosts?.map(renderPost) : renderNull()}
 
                     </div>
 
