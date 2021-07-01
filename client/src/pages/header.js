@@ -1,10 +1,15 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 
 export default function Header() {
+    let history = useHistory()
     const logoutBtn = () => {
         localStorage.clear();
         window.location.reload()
 
+    }
+    const goToAdminPage = ()=>{
+        history.push('/admin')
     }
     return (
         <header>

@@ -73,7 +73,7 @@ export default function AdminPage() {
                         <div class="like-number"><i class="far fa-thumbs-up"></i> Likes: <u>{countLike}</u></div>
                         <br />
                         <div class="like-number"><i class="far fa-comment-alt"></i> Comments : <u>{countComment}</u></div>
-                        <button onClick={()=>{deleteUserBtn(item, index)}}><i class="far fa-trash-alt"></i>  Delete</button>
+                        {item.role == 'user'?(<><button onClick={()=>{deleteUserBtn(item, index)}}><i class="far fa-trash-alt"></i>  Delete</button></>):null}
                     </div>
                 </div>
             </div>
