@@ -867,3 +867,7 @@ Nagin */
 .isPages {
   background: #aca9a9;
 }
+
+.offSearch {
+  display: none;
+}

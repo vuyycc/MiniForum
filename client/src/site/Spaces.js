@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import Footer from '../pages/footer'
 import Header from '../pages/header'
-import { getSpaceByPage, getPostBySpace } from '../axios'
+import { getSpaceByPage, getPostBySpace, searchByTitle, searchByAuthor } from '../axios'
 import '../css/Spaces.css'
 
 export default function Spaces() {
@@ -14,6 +14,8 @@ export default function Spaces() {
     const [pages, setPages] = useState('')
     const [current, setCurrent] = useState('')
     const [listPages, setListPages] = useState([])
+    const [term, setTerm] = useState()
+    const [searchValue, setSearchValue] = useState('everything')
     const params = useParams()
 
     useEffect(() => {
@@ -113,19 +115,57 @@ export default function Spaces() {
         )
     }
 
+    const handleChangeSearchValue = (e) => {
+        if (e.target.value == "everything") {
+            setSearchValue('')
+        }
+        setSearchValue(e.target.value)
+        console.log(searchValue);
+    }
+
+    const handleChangeTerm = (event) => {
+        setTerm(event.target.value)
+    }
+
+
+    const searchPostByTitle = () => {
+        if (term) {
+            searchByTitle(term).then(res => {
+                console.log(res.data);
+                setDataPosts(res.data.data)
+                setPages('')
+            })
+        } else {
+            window.location.reload()
+        }
+    }
+
+    const searchPostByAuthor = () => {
+        if (term) {
+            searchByAuthor(term).then(res => {
+                console.log(res.data);
+                setDataPosts(res.data.data)
+                setPages('')
+            })
+        } else {
+            window.location.reload()
+        }
+    }
+
+
     return (
         <div class="container">
             <Header />
 
             <div class="search-box">
                 <div>
-                    <select name="" id="">
+                    <select name="" id="" onChange={handleChangeSearchValue}>
                         <option value="everything">Everything</option>
-                        <option value="titles">Titles</option>
-                        <option value="descriptions">Descriptions</option>
+                        <option value="titles" >Titles</option>
+                        <option value="author" >Author</option>
                     </select>
-                    <input type="text" name="" id="" placeholder="Search ..." />
-                    <button><i class="fa fa-search"></i></button>
+                    <input type="text" name="" id="" class={searchValue == 'everything' ? "offSearch" : ""} placeholder="Search ..." onChange={handleChangeTerm} />
+                    <button onClick={searchValue == 'titles' ? searchPostByTitle : searchPostByAuthor}><i class="fa fa-search"></i></button>
                 </div>
             </div>
 
