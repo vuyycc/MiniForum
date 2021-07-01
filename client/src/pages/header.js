@@ -8,9 +8,7 @@ export default function Header() {
         window.location.reload()
 
     }
-    const goToAdminPage = ()=>{
-        history.push('/admin')
-    }
+    
     return (
         <header>
             <a href="/main"><img src="/assets/images/Logo.png" class="logo" alt="Logo" /></a>
